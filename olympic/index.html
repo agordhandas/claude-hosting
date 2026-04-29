@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympic · A Four Day Family Itinerary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --moss: #f0eadb;
+    --moss-deep: #e3dcc6;
+    --bark: #1c1f17;
+    --bark-soft: #3d4536;
+    --fern: #4a6741;
+    --fern-deep: #2d4128;
+    --rust: #9b4a26;
+    --fog: #d4cfbb;
+    --water: #2a4750;
+    --lichen: #8a9a6f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--moss);
+    color: var(--bark);
+    font-family: 'Old Standard TT', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  /* paper grain + faint topo lines */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.11 0 0 0 0 0.12 0 0 0 0 0.09 0 0 0 0.4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(ellipse at 30% 20%, transparent 30%, rgba(74,103,65,0.04) 70%),
+      radial-gradient(ellipse at 70% 80%, transparent 40%, rgba(42,71,80,0.04) 80%);
+  }
+  .wrap { position: relative; z-index: 2; }
+
+  /* HEADER */
+  header {
+    padding: 28px 5vw 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bark-soft);
+    border-bottom: 1px solid var(--bark);
+    padding-bottom: 16px;
+  }
+  header .specimen { display: flex; gap: 14px; align-items: center; }
+  header .specimen svg { width: 22px; height: 22px; }
+  header nav { display: flex; gap: 26px; }
+  header nav a { color: var(--bark-soft); text-decoration: none; transition: color 0.2s; }
+  header nav a:hover { color: var(--rust); }
+  @media (max-width: 700px) { header nav { display: none; } }
+
+  /* HERO */
+  .hero {
+    padding: 70px 5vw 80px;
+    position: relative;
+  }
+  .specimen-tag {
+    display: inline-block;
+    border: 1px solid var(--bark);
+    padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--bark);
+    margin-bottom: 30px;
+    background: var(--moss-deep);
+  }
+  .specimen-tag::before { content: 'Spec. № '; color: var(--rust); }
+  h1.title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: clamp(78px, 14vw, 220px);
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: var(--bark);
+    font-variation-settings: "opsz" 96;
+  }
+  h1.title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--fern);
+    display: block;
+    font-size: 0.32em;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin-top: 18px;
+    font-family: 'Old Standard TT', serif;
+    max-width: 720px;
+  }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 2px solid var(--bark);
+  }
+  @media (max-width: 800px) { .hero-meta { grid-template-columns: 1fr; gap: 30px; } }
+  .hero-meta .desc {
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--bark-soft);
+    max-width: 580px;
+  }
+  .specimen-table {
+    border: 1px solid var(--bark);
+    background: var(--moss-deep);
+  }
+  .specimen-table .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--bark);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .specimen-table .row:last-child { border-bottom: none; }
+  .specimen-table .row .lbl { color: var(--bark-soft); }
+  .specimen-table .row .val { color: var(--bark); font-weight: 500; }
+
+  /* THREE ECOSYSTEMS BAND */
+  .ecosystems {
+    background: var(--bark);
+    color: var(--moss);
+    padding: 80px 5vw;
+    position: relative;
+  }
+  .ecosystems h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 300;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -0.01em;
+    margin-bottom: 50px;
+    color: var(--moss);
+    max-width: 800px;
+    line-height: 1.15;
+  }
+  .ecosystems h2 strong { font-weight: 800; color: var(--lichen); }
+  .eco-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+  }
+  @media (max-width: 800px) { .eco-grid { grid-template-columns: 1fr; gap: 36px; } }
+  .eco {
+    border-top: 1px solid rgba(240,234,219,0.25);
+    padding-top: 22px;
+    position: relative;
+  }
+  .eco-num {
+    font-family: 'Old Standard TT', serif;
+    font-style: italic;
+    font-size: 60px;
+    color: var(--lichen);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .eco h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    color: var(--moss);
+  }
+  .eco p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(240,234,219,0.78);
+  }
+  .eco .latin {
+    font-family: 'Old Standard TT', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--lichen);
+    margin-top: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  /* DAYS */
+  .days {
+    padding: 100px 5vw 60px;
+  }
+  .day {
+    padding: 70px 0;
+    border-top: 1px solid var(--bark);
+    position: relative;
+  }
+  .day:last-of-type { border-bottom: 1px solid var(--bark); }
+  .day-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 50px;
+    align-items: end;
+  }
+  @media (max-width: 800px) { .day-header { grid-template-columns: 1fr; gap: 24px; } }
+  .day-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .day-tag::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--rust);
+  }
+  .day h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: clamp(44px, 7vw, 96px);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    color: var(--bark);
+    font-variation-settings: "opsz" 96;
+  }
+  .day-lead {
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--bark-soft);
+    font-style: italic;
+    max-width: 480px;
+    border-left: 3px solid var(--fern);
+    padding-left: 22px;
+  }
+  .stops {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 800px) { .stops { grid-template-columns: 1fr; } }
+  .stop {
+    background: var(--moss-deep);
+    border: 1px solid var(--bark);
+    padding: 28px;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .stop:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--fern);
+  }
+  .stop-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--bark);
+  }
+  .stop-meta .time { color: var(--rust); font-weight: 500; }
+  .stop-meta .dur { color: var(--bark-soft); }
+  .stop h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .stop p {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--bark-soft);
+  }
+  .stop p strong { color: var(--rust); font-style: italic; }
+
+  /* MAP */
+  .map-section {
+    padding: 90px 5vw;
+    background: var(--moss-deep);
+    border-top: 2px solid var(--bark);
+    border-bottom: 2px solid var(--bark);
+  }
+  .section-head {
+    margin-bottom: 50px;
+    max-width: 800px;
+  }
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+  }
+  .section-head h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    font-variation-settings: "opsz" 96;
+  }
+  .section-head h2 strong { font-weight: 800; color: var(--fern); }
+  .section-head h2 em { font-style: italic; color: var(--rust); font-weight: 400; }
+  .map-frame {
+    background: var(--moss);
+    border: 2px solid var(--bark);
+    padding: 24px;
+    aspect-ratio: 16/10;
+    position: relative;
+  }
+  .map-svg { width: 100%; height: 100%; }
+  .map-pin {
+    fill: var(--rust);
+    stroke: var(--moss);
+    stroke-width: 1.5;
+    cursor: pointer;
+    transition: r 0.2s;
+  }
+  .map-pin:hover { r: 9; }
+  .map-pin-major { fill: var(--fern-deep); }
+  .map-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    fill: var(--bark);
+    text-transform: uppercase;
+  }
+  .map-route {
+    fill: none;
+    stroke: var(--rust);
+    stroke-width: 1.6;
+    stroke-dasharray: 5 4;
+    opacity: 0.7;
+  }
+  .map-coast {
+    fill: var(--moss-deep);
+    stroke: var(--water);
+    stroke-width: 0.8;
+  }
+  .map-mountains {
+    fill: var(--lichen);
+    opacity: 0.3;
+  }
+  .map-rainforest {
+    fill: var(--fern);
+    opacity: 0.18;
+  }
+  .map-water-fill { fill: rgba(42,71,80,0.08); }
+
+  /* DRIVING WARNING */
+  .driving {
+    padding: 80px 5vw;
+    background: var(--bark);
+    color: var(--moss);
+  }
+  .driving-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 800px) { .driving-grid { grid-template-columns: 1fr; } }
+  .driving h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 0.9;
+    color: var(--moss);
+    font-variation-settings: "opsz" 96;
+  }
+  .driving h2 em { font-style: italic; font-weight: 300; color: var(--rust); }
+  .driving-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+  .dstat {
+    border-top: 1px solid rgba(240,234,219,0.25);
+    padding-top: 20px;
+  }
+  .dstat .num {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--lichen);
+    font-variation-settings: "opsz" 96;
+  }
+  .dstat .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(240,234,219,0.7);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* LODGING */
+  .lodging {
+    padding: 100px 5vw;
+  }
+  .lodge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  @media (max-width: 900px) { .lodge-grid { grid-template-columns: 1fr; } }
+  .lodge-card {
+    background: var(--moss);
+    border: 1px solid var(--bark);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .lodge-card .lodge-band {
+    background: var(--fern-deep);
+    color: var(--moss);
+    padding: 16px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+  .lodge-card .lodge-band.alt { background: var(--rust); }
+  .lodge-card .lodge-band.alt2 { background: var(--water); }
+  .lodge-card .lodge-body { padding: 28px; }
+  .lodge-card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+  }
+  .lodge-card .nights {
+    font-family: 'Old Standard TT', serif;
+    font-style: italic;
+    color: var(--rust);
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  .lodge-card p {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--bark-soft);
+    margin-bottom: 14px;
+  }
+  .lodge-card .price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--bark);
+    border-top: 1px dashed var(--bark);
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+
+  /* KNOW */
+  .know {
+    background: var(--fern-deep);
+    color: var(--moss);
+    padding: 100px 5vw;
+  }
+  .know .section-head h2 { color: var(--moss); }
+  .know .section-head h2 strong { color: var(--lichen); }
+  .know .section-eyebrow { color: var(--lichen); }
+  .know-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px 60px;
+    margin-top: 30px;
+  }
+  @media (max-width: 800px) { .know-list { grid-template-columns: 1fr; gap: 36px; } }
+  .know-item {
+    border-top: 1px solid rgba(240,234,219,0.25);
+    padding-top: 22px;
+    position: relative;
+  }
+  .know-item .glyph {
+    position: absolute;
+    top: -12px;
+    left: 0;
+    background: var(--fern-deep);
+    padding-right: 12px;
+    font-family: 'Old Standard TT', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--lichen);
+  }
+  .know-item h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--lichen);
+    margin-bottom: 14px;
+    margin-left: 30px;
+  }
+  .know-item p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(240,234,219,0.88);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 70px 5vw 40px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--bark-soft);
+    border-top: 1px solid var(--bark);
+  }
+  footer .sig {
+    font-family: 'Old Standard TT', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--fern);
+    margin-bottom: 22px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .fade-up { opacity: 0; transform: translateY(24px); animation: fadeUp 1s ease forwards; }
+  .fade-up.d1 { animation-delay: 0.1s; }
+  .fade-up.d2 { animation-delay: 0.25s; }
+  .fade-up.d3 { animation-delay: 0.4s; }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="specimen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <path d="M12 2 L12 22 M6 7 Q12 5 18 7 M5 12 Q12 9 19 12 M6 17 Q12 14 18 17"/>
+    </svg>
+    <span>Field Guide № 07</span>
+  </div>
+  <nav>
+    <a href="#days">Itinerary</a>
+    <a href="#map">Map</a>
+    <a href="#lodging">Stay</a>
+    <a href="#know">Logistics</a>
+  </nav>
+  <div>Washington · 2026</div>
+</header>
+
+<section class="hero">
+  <span class="specimen-tag fade-up">07-FAM-AUG</span>
+  <h1 class="title fade-up d1">
+    Olympic.
+    <em>Three landscapes in a single peninsula — alpine, rainforest, and coast — at the pace of a one-and-a-half year old.</em>
+  </h1>
+  <div class="hero-meta fade-up d2">
+    <p class="desc">A counter-clockwise loop through the Olympic Peninsula for a party of eight, designed around the realities of toddlers: short walks, frequent snacks, mild weather, and three of the most distinctive ecosystems in North America inside a single park boundary.</p>
+    <div class="specimen-table">
+      <div class="row"><span class="lbl">Duration</span><span class="val">4 Days</span></div>
+      <div class="row"><span class="lbl">Travelers</span><span class="val">4 + 4</span></div>
+      <div class="row"><span class="lbl">Window</span><span class="val">Jul – Aug</span></div>
+      <div class="row"><span class="lbl">Airport</span><span class="val">SEA</span></div>
+      <div class="row"><span class="lbl">Mode</span><span class="val">Loop</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="ecosystems">
+  <h2>One park. <strong>Three worlds.</strong> The Olympic Peninsula is the only place in the lower 48 where you can stand on a glaciated alpine ridge in the morning, walk through temperate rainforest at lunch, and watch waves break on a Pacific sea stack at sunset.</h2>
+  <div class="eco-grid">
+    <div class="eco">
+      <div class="eco-num">i.</div>
+      <h3>Alpine Ridge</h3>
+      <p>5,200 ft up Hurricane Ridge, the Olympic Mountains spread in a 270° panorama. Wildflowers in July, marmots in the talus, deer that walk through the parking lot like they own it.</p>
+      <div class="latin">Picea engelmannii — Engelmann spruce</div>
+    </div>
+    <div class="eco">
+      <div class="eco-num">ii.</div>
+      <h3>Rainforest</h3>
+      <p>The Hoh receives twelve to fourteen feet of rain a year. Sitka spruce and western hemlock grow three hundred feet tall and are draped in clubmoss so thick the trees look upholstered.</p>
+      <div class="latin">Selaginella oregana — Oregon spikemoss</div>
+    </div>
+    <div class="eco">
+      <div class="eco-num">iii.</div>
+      <h3>Wild Coast</h3>
+      <p>Seventy-three miles of undeveloped Pacific shoreline. Driftwood the size of train cars. Sea stacks that look prehistoric. Fog that rolls in by 4 PM most summer afternoons. Tidepools at low tide.</p>
+      <div class="latin">Pisaster ochraceus — ochre sea star</div>
+    </div>
+  </div>
+</section>
+
+<section class="days" id="days">
+  <div class="day">
+    <div class="day-header">
+      <div>
+        <div class="day-tag">Day One · Arrival</div>
+        <h2>Up the<br>ridge.</h2>
+      </div>
+      <p class="day-lead">Fly into Seattle, ferry across the Sound (kids will love it), drive to Port Angeles. Get up high your first afternoon while the weather's good — the mountains are often clouded in by morning two.</p>
+    </div>
+    <div class="stops">
+      <div class="stop">
+        <div class="stop-meta"><span class="time">12:00</span><span class="dur">90 min</span></div>
+        <h3>Port Angeles & Visitor Center</h3>
+        <p>About 2.5 hours from SEA via the Bainbridge ferry. Lunch in Port Angeles. Stop by the Olympic National Park Visitor Center on the way up — small kids' area, <strong>Junior Ranger booklets here</strong>, ranger talk on what's snowed in.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">14:30</span><span class="dur">4 hrs</span></div>
+        <h3>Hurricane Ridge</h3>
+        <p>17 miles of switchbacks up to 5,200 ft and one of the great mountain panoramas in the country. Cold even in August — bring fleeces. Easy paved Cirque Rim Trail loop right at the visitor center. <strong>Deer in the parking lot, marmots if you're lucky.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-header">
+      <div>
+        <div class="day-tag">Day Two · Lake & Hot Springs</div>
+        <h2>Lake.<br>Falls. Soak.</h2>
+      </div>
+      <p class="day-lead">Possibly the best single day of any national park trip with kids in this age range. Glacier-blue water, a real waterfall, and three hot mineral pools to end on. Nobody melts down today.</p>
+    </div>
+    <div class="stops">
+      <div class="stop">
+        <div class="stop-meta"><span class="time">09:30</span><span class="dur">90 min</span></div>
+        <h3>Lake Crescent Lodge</h3>
+        <p>30 minutes west of Port Angeles. Stunning glacier-fed lake; the water is genuinely Caribbean-blue from low nitrogen. Park at the lodge, skip rocks, walk the shore. Coffee and snacks at the lodge.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">11:00</span><span class="dur">2 hrs</span></div>
+        <h3>Marymere Falls</h3>
+        <p>Trail starts at Lake Crescent. 1.8 miles round-trip through old-growth forest to a 90-foot waterfall. Mostly flat with one set of switchback stairs at the end. Doable for the 4 and 5 yr olds; <strong>toddlers in carriers.</strong> The forest itself is the magic — mossy, fairytale.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">14:00</span><span class="dur">4 hrs</span></div>
+        <h3>Sol Duc Hot Springs</h3>
+        <p>Day-use access to the mineral hot springs — three pools at different temperatures plus a regular swimming pool. The kids will be in heaven. Cap the day with the easy 1.6 mi Sol Duc Falls trail nearby — one of the prettiest waterfalls in the park, very stroller-tolerant.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">18:00</span><span class="dur">—</span></div>
+        <h3>Stay Lake Crescent</h3>
+        <p>Drive 30 minutes east to Lake Crescent Lodge for the night, or back to Port Angeles. <strong>Tonight's the night to overnight in the park</strong> if you've booked it — sunset over the lake from the lodge porch is something else.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-header">
+      <div>
+        <div class="day-tag">Day Three · Forest & Sea</div>
+        <h2>Hoh in<br>the morning.</h2>
+      </div>
+      <p class="day-lead">A long day with two of Olympic's signature experiences back to back: the temperate rainforest and the wild Pacific. Plan for ~5 hours of total driving. Pack snacks. Pack more snacks.</p>
+    </div>
+    <div class="stops">
+      <div class="stop">
+        <div class="stop-meta"><span class="time">09:00</span><span class="dur">4 hrs</span></div>
+        <h3>Hoh Rainforest</h3>
+        <p>~2 hours from Lake Crescent. <strong>Critical: line at the entrance can hit 2 hours by 11 AM in summer.</strong> Arrive before 10 or you're stuck. Do the Hall of Mosses (0.8 mi, flat, the rainforest postcard) and the Spruce Nature Trail (1.2 mi). Toddlers walk parts; carriers for the rest.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">14:00</span><span class="dur">90 min</span></div>
+        <h3>Forks (Lunch)</h3>
+        <p>30 minutes from Hoh. Pacific Pizza is the kid-friendly play. If you have Twilight fans in the group, the gift shops play it up hard. Otherwise just refuel and push to the coast.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">16:00</span><span class="dur">3 hrs</span></div>
+        <h3>Rialto Beach</h3>
+        <p>30 minutes from Forks. <strong>Otherworldly.</strong> Massive driftwood logs the kids will fort-build with for hours, sea stacks, bald eagles overhead. The beach is rocky pebbles, not sand. Stay through golden hour. Don't attempt the 4-mi Hole-in-the-Wall hike with this group; just beach time.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">19:30</span><span class="dur">—</span></div>
+        <h3>Forks or Kalaloch (overnight)</h3>
+        <p>Stay close — Kalaloch Lodge is on the coast and tomorrow's first stop is right there. Kalaloch books out 10+ months ahead; Forks has more cabin and motel options.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="day">
+    <div class="day-header">
+      <div>
+        <div class="day-tag">Day Four · Coast & Home</div>
+        <h2>Tidepools<br>then Quinault.</h2>
+      </div>
+      <p class="day-lead">A final coast morning, then start working the loop back toward Seattle via the south side of the peninsula. Tighter day — build in airport buffer and don't book an early flight.</p>
+    </div>
+    <div class="stops">
+      <div class="stop">
+        <div class="stop-meta"><span class="time">10:00</span><span class="dur">2.5 hrs</span></div>
+        <h3>Ruby Beach</h3>
+        <p>20 minutes south of Forks. The iconic Olympic coast image — sea stacks, tidepools at low tide (<strong>check the chart</strong>), driftwood. Short steep-ish trail down to the beach (carriers needed). Pack a picnic. Better tidepools than Rialto if timed right.</p>
+      </div>
+      <div class="stop">
+        <div class="stop-meta"><span class="time">13:30</span><span class="dur">3 hrs</span></div>
+        <h3>Lake Quinault Lodge</h3>
+        <p>1 hour south of Ruby Beach. Historic lodge on a beautiful lake. Lunch on the lawn. Easy nearby walks: the Rain Forest Nature Trail (0.5 mi loop, massive trees) or the Quinault Big Cedar — world's largest, short walk from the road. Then ~2.5 hr drive back to SEA.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="map-section" id="map">
+  <div class="section-head">
+    <div class="section-eyebrow">Geographic Index</div>
+    <h2>The route, <em>charted</em> <strong>counter-clockwise.</strong></h2>
+  </div>
+  <div class="map-frame">
+    <svg class="map-svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
+      <!-- water bg -->
+      <rect class="map-water-fill" width="800" height="500"/>
+      <!-- subtle grid -->
+      <defs>
+        <pattern id="grid" patternUnits="userSpaceOnUse" width="40" height="40">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(28,31,23,0.05)" stroke-width="0.5"/>
+        </pattern>
+        <pattern id="topo" patternUnits="userSpaceOnUse" width="120" height="120">
+          <path d="M 0,60 Q 30,40 60,60 T 120,60" fill="none" stroke="rgba(74,103,65,0.1)" stroke-width="0.4"/>
+          <path d="M 0,80 Q 30,65 60,80 T 120,80" fill="none" stroke="rgba(74,103,65,0.08)" stroke-width="0.4"/>
+          <path d="M 0,40 Q 30,25 60,40 T 120,40" fill="none" stroke="rgba(74,103,65,0.08)" stroke-width="0.4"/>
+        </pattern>
+      </defs>
+      <rect width="800" height="500" fill="url(#grid)"/>
+
+      <!-- Olympic Peninsula stylized -->
+      <path class="map-coast" d="M 130,200 Q 110,250 130,310 Q 150,360 200,400 Q 280,430 380,420 Q 460,400 510,380 Q 540,350 555,310 Q 570,260 560,210 Q 540,160 480,135 Q 400,110 310,115 Q 220,125 170,155 Q 145,175 130,200 Z"/>
+
+      <!-- mountain mass (Olympic Mtns) -->
+      <ellipse class="map-mountains" cx="350" cy="270" rx="120" ry="60"/>
+      <ellipse class="map-mountains" cx="370" cy="280" rx="80" ry="35" opacity="0.4"/>
+
+      <!-- rainforest band -->
+      <ellipse class="map-rainforest" cx="220" cy="320" rx="55" ry="40"/>
+
+      <!-- topo overlay -->
+      <rect width="800" height="500" fill="url(#topo)"/>
+
+      <!-- Route path -->
+      <path class="map-route" d="M 470,170 Q 430,200 410,235 Q 360,250 305,250 Q 240,260 200,310 Q 165,355 175,395 Q 250,400 310,415 Q 360,420 405,415"/>
+
+      <!-- Pins -->
+      <!-- Sea-Tac (off-park reference) -->
+      <circle class="map-pin" cx="600" cy="220" r="5"/>
+      <text class="map-label" x="615" y="223">SEA-TAC</text>
+
+      <!-- Port Angeles -->
+      <circle class="map-pin map-pin-major" cx="470" cy="170" r="7"/>
+      <text class="map-label" x="485" y="168">Port Angeles</text>
+      <text class="map-label" x="485" y="180" fill="var(--rust)" style="font-size:8px;">DAY 1 START</text>
+
+      <!-- Hurricane Ridge -->
+      <circle class="map-pin" cx="450" cy="220" r="6"/>
+      <text class="map-label" x="465" y="223">Hurricane Ridge</text>
+
+      <!-- Lake Crescent -->
+      <circle class="map-pin map-pin-major" cx="395" cy="215" r="7"/>
+      <text class="map-label" x="385" y="208" text-anchor="end">Lake Crescent</text>
+
+      <!-- Sol Duc -->
+      <circle class="map-pin" cx="345" cy="240" r="6"/>
+      <text class="map-label" x="335" y="243" text-anchor="end">Sol Duc</text>
+
+      <!-- Hoh -->
+      <circle class="map-pin map-pin-major" cx="225" cy="320" r="7"/>
+      <text class="map-label" x="215" y="318" text-anchor="end">Hoh Rainforest</text>
+
+      <!-- Forks -->
+      <circle class="map-pin" cx="220" cy="265" r="5"/>
+      <text class="map-label" x="210" y="263" text-anchor="end">Forks</text>
+
+      <!-- Rialto -->
+      <circle class="map-pin map-pin-major" cx="170" cy="280" r="7"/>
+      <text class="map-label" x="160" y="278" text-anchor="end">Rialto Beach</text>
+
+      <!-- Ruby Beach -->
+      <circle class="map-pin map-pin-major" cx="170" cy="370" r="7"/>
+      <text class="map-label" x="160" y="373" text-anchor="end">Ruby Beach</text>
+
+      <!-- Lake Quinault -->
+      <circle class="map-pin map-pin-major" cx="270" cy="415" r="7"/>
+      <text class="map-label" x="285" y="418">Lake Quinault</text>
+
+      <!-- Compass -->
+      <g transform="translate(720,420)">
+        <circle r="24" fill="none" stroke="var(--bark)" stroke-width="0.8"/>
+        <polygon points="0,-24 5,0 0,24 -5,0" fill="var(--bark)"/>
+        <polygon points="0,-24 5,0 0,0" fill="var(--rust)"/>
+        <text y="-32" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--bark)">N</text>
+      </g>
+
+      <!-- Scale -->
+      <g transform="translate(50,460)">
+        <line x1="0" y1="0" x2="100" y2="0" stroke="var(--bark)" stroke-width="1"/>
+        <line x1="0" y1="-4" x2="0" y2="4" stroke="var(--bark)" stroke-width="1"/>
+        <line x1="50" y1="-3" x2="50" y2="3" stroke="var(--bark)" stroke-width="0.8"/>
+        <line x1="100" y1="-4" x2="100" y2="4" stroke="var(--bark)" stroke-width="1"/>
+        <text x="50" y="18" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--bark)">25 MILES</text>
+      </g>
+
+      <!-- Title block -->
+      <text x="50" y="50" font-family="Bricolage Grotesque" font-weight="800" font-size="22" fill="var(--bark)">OLYMPIC PENINSULA</text>
+      <text x="50" y="68" font-family="JetBrains Mono" font-size="9" fill="var(--bark-soft)" letter-spacing="2">WASHINGTON · 47.8°N 124.0°W</text>
+
+      <!-- Pacific label -->
+      <text x="80" y="380" font-family="Old Standard TT" font-style="italic" font-size="20" fill="var(--water)" opacity="0.6">Pacific</text>
+
+      <!-- Puget label -->
+      <text x="620" y="280" font-family="Old Standard TT" font-style="italic" font-size="14" fill="var(--water)" opacity="0.7">Puget Sound</text>
+    </svg>
+  </div>
+</section>
+
+<section class="driving">
+  <div class="driving-grid">
+    <h2>The honest truth about <em>driving.</em></h2>
+    <div>
+      <p style="font-size:19px; line-height:1.6; margin-bottom:30px; color:rgba(240,234,219,0.85);">Olympic is bigger than it looks. There is no road through the middle of the park — you drive around it. Plan for this and you'll love the trip; pretend it's compact and the kids will hate you by day three.</p>
+      <div class="driving-stats">
+        <div class="dstat">
+          <div class="num">~330</div>
+          <div class="lbl">Total miles<br>over 4 days</div>
+        </div>
+        <div class="dstat">
+          <div class="num">5h</div>
+          <div class="lbl">Longest driving<br>day (Day 3)</div>
+        </div>
+        <div class="dstat">
+          <div class="num">2</div>
+          <div class="lbl">Lodging bases<br>recommended</div>
+        </div>
+        <div class="dstat">
+          <div class="num">1</div>
+          <div class="lbl">Audiobook minimum<br>per parent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lodging" id="lodging">
+  <div class="section-head">
+    <div class="section-eyebrow">Where to stay</div>
+    <h2>Two bases. <strong>Three options.</strong></h2>
+  </div>
+  <div class="lodge-grid">
+    <div class="lodge-card">
+      <div class="lodge-band"><span>NIGHTS 1–2</span><span>★ TOP PICK</span></div>
+      <div class="lodge-body">
+        <h3>Lake Crescent Lodge</h3>
+        <div class="nights">historic, rustic, on the water</div>
+        <p>Built in 1916, no TVs, shared bathrooms in the main lodge but private cabins available. The view from the porch is the reason to come. Restaurant is genuinely excellent. Marymere Falls trailhead is in the parking lot.</p>
+        <p>Books out 12 months in advance. Cabins go first.</p>
+        <div class="price">~$280–$420 / night peak</div>
+      </div>
+    </div>
+    <div class="lodge-card">
+      <div class="lodge-band alt"><span>NIGHTS 1–2 ALT</span><span>EASIER</span></div>
+      <div class="lodge-body">
+        <h3>Port Angeles Inn</h3>
+        <div class="nights">flexible, modern, good base</div>
+        <p>If Lake Crescent is full or you want predictable rooms with WiFi and TVs, base in Port Angeles. 30 minutes from Lake Crescent, full restaurant scene, easy grocery runs. Less atmosphere but more functional with kids.</p>
+        <p>Many options including Olympic Lodge, Red Lion, and Vrbos.</p>
+        <div class="price">~$200–$350 / room / night</div>
+      </div>
+    </div>
+    <div class="lodge-card">
+      <div class="lodge-band alt2"><span>NIGHTS 3–4</span><span>COAST</span></div>
+      <div class="lodge-body">
+        <h3>Kalaloch Lodge</h3>
+        <div class="nights">on the bluff, ocean views</div>
+        <p>Bluff cabins overlooking the Pacific — the kids will lose their minds at sunset. Older property, expect quirks. Best position for hitting Ruby Beach in the morning. Restaurant on site so you don't need to drive for dinner.</p>
+        <p>Books 13 months out. If full: Forks has cabin/motel options 30 min away.</p>
+        <div class="price">~$320–$500 / night</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="know" id="know">
+  <div class="section-head">
+    <div class="section-eyebrow">Field Notes</div>
+    <h2>Things that <strong>matter</strong> <em>more</em> than people say.</h2>
+  </div>
+  <div class="know-list">
+    <div class="know-item">
+      <span class="glyph">i.</span>
+      <h3>Hoh Rainforest Entry Line</h3>
+      <p>The single biggest scheduling risk of the trip. Park rangers stop traffic 5 miles before the visitor center; from that point, posted waits hit 2 hours by mid-morning in summer. Arrive before 10 AM or visit late afternoon (after 3 PM). The middle of the day is the trap.</p>
+    </div>
+    <div class="know-item">
+      <span class="glyph">ii.</span>
+      <h3>Lodging Books a Year Out</h3>
+      <p>In-park lodges (Lake Crescent, Sol Duc, Kalaloch, Lake Quinault) all book 12–13 months ahead for July/August. Set a calendar reminder. If you missed the window, check daily for cancellations — they happen.</p>
+    </div>
+    <div class="know-item">
+      <span class="glyph">iii.</span>
+      <h3>Tide Charts</h3>
+      <p>Tidepools at Ruby and Rialto are only good at low tide. Download the NOAA tide app or check Tides.net. Aim for low tide windows that line up with daylight on day 3 or 4 — that's the difference between "saw some rocks" and "kids found a sea star."</p>
+    </div>
+    <div class="know-item">
+      <span class="glyph">iv.</span>
+      <h3>The Bainbridge Ferry</h3>
+      <p>The Seattle → Bainbridge Island ferry saves driving time and is genuinely fun for kids — they can be out of the car on the upper deck. ~35 min crossing, runs every 50 min. Walk-on passengers always get on; cars sometimes wait a sailing in summer.</p>
+    </div>
+    <div class="know-item">
+      <span class="glyph">v.</span>
+      <h3>What to Pack</h3>
+      <p>Rain layers (rainforest is rainy even in August), warm fleece for Hurricane Ridge (50°F at the top), water shoes for Ruby tidepools, swimsuits for Sol Duc and Lake Crescent, two kid-carrier backpacks. Strollers work at the rainforest visitor center and not much else.</p>
+    </div>
+    <div class="know-item">
+      <span class="glyph">vi.</span>
+      <h3>Bears Are Real but Calm</h3>
+      <p>Olympic has black bears, not grizzlies. Keep food locked in the car at trailheads, don't leave snacks in strollers at picnic areas, and you'll be fine. Bear spray is overkill here unless you're backpacking.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="sig">— compiled with care, for eight travelers —</div>
+  <div>Olympic National Park · Field Guide № 07</div>
+  <div style="margin-top:8px;opacity:0.6;">Summer 2026 · Counter-clockwise loop</div>
+</footer>
+
+</div>
+</body>
+</html>

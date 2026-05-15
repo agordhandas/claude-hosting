@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Unstained Tissue Can Tell Us</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --text: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --accent: #2d5a7b;
+    --accent-light: #e8f0f6;
+    --bg: #fafaf8;
+    --card-bg: #ffffff;
+    --border: #e0ddd6;
+    --highlight: #c9562c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.72;
+    font-size: 17.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Password gate */
+  #gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  #gate .gate-inner {
+    text-align: center;
+    max-width: 320px;
+  }
+
+  #gate h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0.3rem;
+  }
+
+  #gate p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  #gate input {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.1rem;
+    padding: 0.6rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.15em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #gate input:focus {
+    border-color: var(--accent);
+  }
+
+  #gate input.error {
+    border-color: var(--highlight);
+    animation: shake 0.3s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  #content { display: none; }
+
+  /* Main content */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    font-style: italic;
+  }
+
+  h2 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+
+  h2::after {
+    content: '';
+    display: block;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  p { margin-bottom: 1.1rem; }
+
+  .lead {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .objection-box {
+    background: #fdf6f0;
+    border-left: 4px solid var(--highlight);
+    padding: 1.4rem 1.6rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .objection-box .label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--highlight);
+    margin-bottom: 0.5rem;
+  }
+
+  .objection-box p:last-child { margin-bottom: 0; }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0 2rem;
+    font-size: 0.92rem;
+  }
+
+  .comparison-table th {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: left;
+    padding: 0.7rem 1rem;
+    background: var(--accent);
+    color: white;
+  }
+
+  .comparison-table th:first-child {
+    border-radius: 6px 0 0 0;
+  }
+
+  .comparison-table th:last-child {
+    border-radius: 0 6px 0 0;
+  }
+
+  .comparison-table td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .comparison-table tr:nth-child(even) td {
+    background: #f8f7f4;
+  }
+
+  .comparison-table .question-col {
+    font-weight: 500;
+    width: 40%;
+  }
+
+  .yes { color: #2a7d4f; font-weight: 500; }
+  .no { color: #b0413e; font-weight: 500; }
+  .partial { color: #b8860b; font-weight: 500; }
+
+  .signal-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.3rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .signal-card .molecule {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .signal-card .what {
+    font-weight: 600;
+    margin: 0.3rem 0 0.2rem;
+  }
+
+  .signal-card .detail {
+    font-size: 0.93rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+  }
+
+  .key-point {
+    background: var(--accent-light);
+    border-radius: 8px;
+    padding: 1.3rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .key-point p { margin-bottom: 0; }
+
+  .figure {
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .figure .caption {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+    font-style: italic;
+  }
+
+  .spectrum-bar {
+    height: 48px;
+    border-radius: 8px;
+    background: linear-gradient(
+      to right,
+      #2a0a3d 0%,
+      #5b21b6 15%,
+      #3b82f6 30%,
+      #22d3ee 42%,
+      #4ade80 55%,
+      #facc15 68%,
+      #f97316 80%,
+      #ef4444 90%,
+      #7f1d1d 100%
+    );
+    position: relative;
+    margin: 0.5rem 0;
+  }
+
+  .spectrum-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    padding: 0 0.2rem;
+  }
+
+  .spectrum-markers {
+    position: relative;
+    height: 80px;
+    margin-top: -4px;
+  }
+
+  .marker {
+    position: absolute;
+    text-align: center;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.65rem;
+    transform: translateX(-50%);
+  }
+
+  .marker .line {
+    width: 2px;
+    height: 20px;
+    background: var(--text);
+    margin: 0 auto 4px;
+  }
+
+  .marker .name { font-weight: 600; }
+  .marker .wave { color: var(--text-secondary); }
+
+  blockquote {
+    border-left: 3px solid var(--border);
+    padding-left: 1.2rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  .footnote {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .footnote p { margin-bottom: 0.5rem; }
+
+  sup {
+    font-size: 0.7em;
+    color: var(--accent);
+    cursor: default;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 2rem 1rem 3rem; }
+    h1 { font-size: 1.7rem; }
+    .comparison-table { font-size: 0.82rem; }
+    .comparison-table td, .comparison-table th { padding: 0.5rem 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Password gate -->
+<div id="gate">
+  <div class="gate-inner">
+    <h1>This document is private</h1>
+    <p>Enter the passcode to continue.</p>
+    <input type="password" id="passcode" autocomplete="off" autofocus placeholder="****">
+  </div>
+</div>
+
+<!-- Actual content (hidden until authenticated) -->
+<div id="content">
+<div class="container">
+
+<h1>What Unstained Tissue Can Tell Us</h1>
+<p class="subtitle">A case for reading tissue by its own light</p>
+
+<p class="lead">
+For 150 years, pathology has worked the same way: cut the tissue, stain it, look at it. H&E reveals morphology. Trichrome reveals collagen. Each stain shows structure beautifully. But stains only show what dye molecules bind to. They cannot show what the tissue is <em>doing</em>.
+</p>
+
+<p>
+Tissue is not inert. Living and recently fixed cells contain molecules that naturally fluoresce when illuminated at specific wavelengths. This autofluorescence is not noise &mdash; it is signal. Different molecules glow at different wavelengths, and each one reports on a different aspect of cellular biology: metabolic activity, structural protein composition, crosslinking maturity, oxidative state.
+</p>
+
+<p>
+The idea is simple: build an imaging system that captures these native optical signals from unstained tissue, then use computational methods to translate them into clinically meaningful readouts. Not to replace the pathologist's eye, but to show it things that stained glass physically cannot.
+</p>
+
+<!-- Spectrum figure -->
+<div class="figure">
+  <div class="spectrum-bar"></div>
+  <div class="spectrum-labels">
+    <span>340 nm (UV)</span>
+    <span>500 nm</span>
+    <span>700 nm</span>
+  </div>
+  <div class="spectrum-markers" style="height:90px;">
+    <div class="marker" style="left: 8%;">
+      <div class="line"></div>
+      <div class="name">NAD(P)H</div>
+      <div class="wave">340&rarr;460 nm</div>
+    </div>
+    <div class="marker" style="left: 28%;">
+      <div class="line"></div>
+      <div class="name">Collagen</div>
+      <div class="wave">370&rarr;450 nm</div>
+    </div>
+    <div class="marker" style="left: 48%;">
+      <div class="line"></div>
+      <div class="name">Elastin</div>
+      <div class="wave">400&rarr;500 nm</div>
+    </div>
+    <div class="marker" style="left: 64%;">
+      <div class="line"></div>
+      <div class="name">FAD</div>
+      <div class="wave">450&rarr;530 nm</div>
+    </div>
+    <div class="marker" style="left: 84%;">
+      <div class="line"></div>
+      <div class="name">Lipofuscin</div>
+      <div class="wave">450&rarr;600 nm</div>
+    </div>
+  </div>
+  <div class="caption">
+    Endogenous fluorophores in tissue, each reporting different biology. No exogenous dyes required.
+  </div>
+</div>
+
+<h2>The Signals in Unstained Tissue</h2>
+
+<p>These are the molecules that fluoresce natively in tissue, and what each one tells you:</p>
+
+<div class="signal-card">
+  <div class="molecule">NAD(P)H &amp; FAD</div>
+  <div class="what">Cellular metabolic state</div>
+  <p class="detail">
+    The ratio of NAD(P)H to FAD fluorescence reflects whether a cell is running on glycolysis or oxidative phosphorylation. This is the optical redox ratio &mdash; a real-time readout of metabolic phenotype. In tumors, this distinguishes metabolically active cancer cells from quiescent ones. In immune cells, it distinguishes activated (glycolytic) T cells from exhausted (oxidative) ones. In hepatocytes, it reports on mitochondrial function and cellular stress. No stain captures this. No IHC marker captures this. It is invisible to conventional pathology.
+  </p>
+</div>
+
+<div class="signal-card">
+  <div class="molecule">Collagen autofluorescence</div>
+  <div class="what">Fibrosis quantity, distribution, and maturity</div>
+  <p class="detail">
+    Collagen fluoresces naturally under UV/violet excitation. Critically, the spectral properties of collagen autofluorescence change with crosslinking and maturation. Newly deposited (immature, potentially reversible) collagen and mature (heavily crosslinked, likely irreversible) collagen are spectrally distinguishable. Trichrome stains all collagen the same blue regardless of its biochemical state. A pathologist reading trichrome sees <em>where</em> collagen is and roughly <em>how much</em>. Autofluorescence shows where, how much, <em>and what kind</em>.
+  </p>
+</div>
+
+<div class="signal-card">
+  <div class="molecule">Elastin</div>
+  <div class="what">Vascular and structural integrity</div>
+  <p class="detail">
+    Elastin autofluorescence maps the elastic fiber network &mdash; vessel walls, parenchymal architecture, tissue mechanics. Degradation of elastic fibers (elastolysis) in liver is associated with fibrosis progression and portal hypertension, but is not routinely assessed on trichrome.
+  </p>
+</div>
+
+<div class="signal-card">
+  <div class="molecule">Lipofuscin</div>
+  <div class="what">Cellular aging and oxidative damage</div>
+  <p class="detail">
+    Lipofuscin granules accumulate in cells under chronic oxidative stress. Their autofluorescence is a marker of cumulative cellular damage &mdash; a tissue-level clock that has no equivalent in routine histochemistry.
+  </p>
+</div>
+
+<h2>Addressing the MASH Question</h2>
+
+<div class="objection-box">
+  <div class="label">The Objection</div>
+  <p>
+    "Most GI pathologists can stage fibrosis. We look at the trichrome, we see the collagen, we score it. This is not a problem that needs solving."
+  </p>
+</div>
+
+<p>
+This objection deserves to be taken seriously, because it's half right. An experienced GI pathologist looking at a well-prepared trichrome <em>can</em> stage fibrosis. The question is what "stage fibrosis" actually means, and whether it captures everything the clinical situation requires.
+</p>
+
+<h3>What expert staging does well</h3>
+
+<p>
+Pattern recognition. A GI pathologist integrates portal collagen, perisinusoidal fibrosis, bridging, nodularity, and architectural distortion into a gestalt that maps to a staging system (METAVIR, Ishak, NAS CRN). For an individual patient in front of an individual pathologist, this works. No one is arguing that expert pathologists cannot read trichrome.
+</p>
+
+<h3>Where the cracks are</h3>
+
+<p><strong>Staging is ordinal, not quantitative.</strong> F2 vs. F3 is a categorical boundary drawn through a continuous biological process. Two biopsies with meaningfully different collagen burden can both score F2. Two biopsies with similar collagen can straddle the F2/F3 boundary depending on the pathologist. The staging system is a binning operation that discards information. For clinical management of individual patients, the bins are usually good enough. For measuring treatment effects across hundreds of patients in a drug trial &mdash; where the signal you're looking for is a <em>fractional shift</em> in fibrosis &mdash; ordinal bins add noise that obscures real effects.</p>
+
+<p><strong>Reproducibility degrades at scale.</strong> Inter-pathologist agreement on MASH fibrosis staging has weighted kappa values of 0.5&ndash;0.7 in published studies, even among hepatopathology experts.<sup>1,2</sup> That's "moderate to substantial" agreement, which sounds fine &mdash; until you're powering a clinical trial. If your endpoint measurement has 30&ndash;50% disagreement between qualified readers, you need a proportionally larger trial to detect a real drug effect. This is not a commentary on any individual pathologist's skill. It's a property of the measurement instrument: ordinal human scoring of a continuous biological variable has inherent noise.</p>
+
+<p><strong>Collagen quantity &ne; collagen biology.</strong> This is the deeper issue. Trichrome tells you where collagen is. It does not tell you:</p>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Clinical question</th>
+      <th>Trichrome + pathologist</th>
+      <th>Autofluorescence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="question-col">How much collagen is present?</td>
+      <td><span class="partial">Semi-quantitative</span> (ordinal stage)</td>
+      <td><span class="yes">Quantitative</span> (continuous, pixel-level)</td>
+    </tr>
+    <tr>
+      <td class="question-col">Where is the collagen?</td>
+      <td><span class="yes">Yes</span></td>
+      <td><span class="yes">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="question-col">Is the collagen mature or newly deposited?</td>
+      <td><span class="no">No</span> &mdash; trichrome stains both identically</td>
+      <td><span class="yes">Yes</span> &mdash; crosslinking shifts fluorescence spectrum</td>
+    </tr>
+    <tr>
+      <td class="question-col">Is fibrosis progressing or regressing?</td>
+      <td><span class="no">No</span> &mdash; requires serial biopsies + inference</td>
+      <td><span class="partial">Probable</span> &mdash; collagen maturity ratio as a single-timepoint indicator</td>
+    </tr>
+    <tr>
+      <td class="question-col">Are the hepatocytes metabolically stressed?</td>
+      <td><span class="no">No</span></td>
+      <td><span class="yes">Yes</span> &mdash; NAD(P)H/FAD optical redox ratio</td>
+    </tr>
+    <tr>
+      <td class="question-col">Is there active stellate cell activation?</td>
+      <td><span class="partial">Inferred</span> from morphology</td>
+      <td><span class="yes">Metabolic signature</span> of activated vs. quiescent stellate cells</td>
+    </tr>
+    <tr>
+      <td class="question-col">Reproducible across 200 readers in a multicenter trial?</td>
+      <td><span class="no">No</span> &mdash; &kappa; 0.5&ndash;0.7</td>
+      <td><span class="yes">Yes</span> &mdash; computational, deterministic</td>
+    </tr>
+    <tr>
+      <td class="question-col">Can the same section be used for other assays afterward?</td>
+      <td><span class="no">No</span> &mdash; staining is destructive</td>
+      <td><span class="yes">Yes</span> &mdash; non-destructive</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+The third row is the crux. A GI pathologist reading trichrome sees collagen or no collagen. She cannot distinguish recently deposited type III collagen (thin, loosely crosslinked, potentially reversible with treatment) from mature type I collagen (thick, heavily crosslinked, probably permanent). The biochemistry is different. The clinical implications are different. The dye doesn't care &mdash; it binds both.
+</p>
+
+<div class="key-point">
+  <p>
+    <strong>The claim is not "pathologists are bad at staging."</strong> The claim is that staging, by design, captures a subset of the information in the tissue. Autofluorescence captures a different, complementary subset that is physically inaccessible to any stain-based method, regardless of who reads it.
+  </p>
+</div>
+
+<h3>Why this matters most in drug development</h3>
+
+<p>
+Consider a MASH trial with 600 patients, half on drug, half on placebo. The primary endpoint is "improvement in fibrosis by at least one stage without worsening of NASH." The measurement instrument is a pathologist reading trichrome.
+</p>
+
+<p>
+If the drug genuinely reduces collagen deposition by 20%, but a substantial fraction of that reduction is in immature collagen that hasn't yet shifted the overall stage, the endpoint misses it. The patient improved biologically. The trial says they didn't. Multiply that across hundreds of patients, and a real drug effect drowns in measurement noise.
+</p>
+
+<p>
+A continuous, quantitative collagen readout &mdash; one that can detect a 15% reduction in collagen area, or a shift in the mature/immature collagen ratio &mdash; would detect the same treatment effect with fewer patients and shorter follow-up. This isn't hypothetical: it's why HistoIndex, PathAI, and others are building quantitative fibrosis tools, and why pharma is actively seeking them. The insight specific to autofluorescence is that it adds <em>collagen biology</em> (maturity, crosslinking) on top of collagen quantity, which no digital pathology tool working from trichrome images can do.
+</p>
+
+<h2>Beyond MASH: What Else This Unlocks</h2>
+
+<h3>Immunotherapy response prediction</h3>
+
+<p>
+The metabolic state of tumor-infiltrating immune cells determines whether they're capable of killing cancer cells. Activated, functional T cells are glycolytic (high NAD(P)H, low FAD). Exhausted T cells shift toward oxidative metabolism. This metabolic phenotype &mdash; which directly determines immunotherapy response &mdash; is readable via autofluorescence and fluorescence lifetime imaging. It is not readable on H&E. It is not readable on PD-L1 IHC. It is, at present, essentially invisible in clinical pathology.
+</p>
+
+<p>
+Two out of three patients given checkpoint inhibitors don't respond. The best current biomarker (PD-L1 expression, read by a pathologist on IHC) predicts response only 30&ndash;40% of the time. The metabolic state of the immune infiltrate is the mechanism behind the response, and it's optically accessible without staining.
+</p>
+
+<h3>Surgical margins</h3>
+
+<p>
+Intraoperative frozen section answers "tumor cells present at margin, yes or no." It cannot distinguish active tumor from treatment-effect changes. It cannot read tissue viability or metabolic state at the margin. A rapid autofluorescence scan of a fresh, unstained margin could provide richer information in less time than frozen section &mdash; without the artifacts that freezing introduces.
+</p>
+
+<h3>Non-destructive multiplexing</h3>
+
+<p>
+Every stain is a one-way door. Once tissue is stained, that section is committed. If you want H&E <em>and</em> trichrome <em>and</em> IHC <em>and</em> IF, you need serial sections, and with small biopsies, you run out of tissue.
+</p>
+<p>
+Autofluorescence imaging is non-destructive. The section that was imaged for collagen autofluorescence can subsequently be stained with H&E, then destained and restained for IHC, or used for spatial transcriptomics. One biopsy, every assay. This is especially valuable for small-needle biopsies where tissue is precious &mdash; exactly the situation in liver biopsy for MASH.
+</p>
+
+<h2>What's Actually New Here</h2>
+
+<p>
+Autofluorescence microscopy is not new. Pathologists have known tissue fluoresces since the 1930s. What's new is the convergence that makes it <em>clinically actionable</em>:
+</p>
+
+<p>
+<strong>Sensors.</strong> Cooled CMOS cameras with the sensitivity to capture dim autofluorescence signals at sub-micron resolution now cost $1&ndash;3K instead of $20K+. The input to every label-free modality is photon detection, and the detector got 10x cheaper in the last five years.
+</p>
+
+<p>
+<strong>Computation.</strong> Deep learning models that translate multi-channel autofluorescence into pathologist-readable virtual H&E images now achieve 85&ndash;95% concordance with real stains in published studies.<sup>3,4</sup> The AI bridge between "raw optical signal" and "something a pathologist can interpret" crossed the usability threshold in the last 2&ndash;3 years.
+</p>
+
+<p>
+<strong>Clinical pull.</strong> MASH drug approvals created a market that <em>depends</em> on better histological endpoints. Immuno-oncology biomarker programs are actively seeking response-prediction tools beyond PD-L1. For the first time, the buyer is looking for this.
+</p>
+
+<div class="key-point">
+<p>
+<strong>The analogy:</strong> Radiology had X-ray for decades before MRI. X-ray showed structure &mdash; bones, masses, air. MRI added a new physical signal &mdash; proton relaxation in magnetic fields &mdash; that revealed soft tissue contrast, diffusion, perfusion, function. It didn't replace X-ray. It saw what X-ray couldn't. This is the same idea applied to pathology: a new physical signal, from the same tissue, revealing biology that stains cannot access.
+</p>
+</div>
+
+<h2>In Summary</h2>
+
+<p>
+A GI pathologist reading trichrome sees collagen architecture with expert eyes. That skill is real, hard-won, and clinically valuable. Nothing here diminishes it.
+</p>
+
+<p>
+The claim is narrower and more specific: <em>stained tissue contains less information than unstained tissue.</em> The act of staining highlights one thing by washing out everything else. The native optical signals in unstained tissue &mdash; autofluorescence from metabolic cofactors, spectral shifts from collagen crosslinking, fluorescence lifetime from molecular environment &mdash; encode biology that no stain reveals, because no stain was designed to.
+</p>
+
+<p>
+The question isn't whether a pathologist can stage fibrosis. She can. The question is whether the staging captures everything the tissue knows. It doesn't. And for the first time, the technology exists to read what's been there all along.
+</p>
+
+<div class="footnote">
+  <p><sup>1</sup> Davison BA et al. "Suboptimal reliability of liver biopsy evaluation has implications for randomized clinical trials." <em>J Hepatol.</em> 2020;73(6):1322-1332.</p>
+  <p><sup>2</sup> Pournik O et al. "Inter-observer and intra-observer agreement in pathological evaluation of non-alcoholic fatty liver disease suspected liver biopsies." <em>Hepat Mon.</em> 2014;14(1):e12247.</p>
+  <p><sup>3</sup> Rivenson Y et al. "Virtual histological staining of unlabelled tissue autofluorescence images via deep learning." <em>Nat Biomed Eng.</em> 2019;3(6):466-477.</p>
+  <p><sup>4</sup> Li D et al. "Deep learning for virtual histological staining of bright-field microscopy images." <em>BME Frontiers.</em> 2022.</p>
+</div>
+
+</div>
+</div>
+
+<script>
+(function() {
+  var hash = '92b690fedfae7ea8024eb6ea6d53f64cd0a4d20e44acf71417dca4f0d28f5c74';
+
+  async function sha256(str) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  var input = document.getElementById('passcode');
+
+  input.addEventListener('input', async function() {
+    var h = await sha256(input.value);
+    if (h === hash) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+      sessionStorage.setItem('lf-auth', '1');
+    }
+  });
+
+  input.addEventListener('keydown', async function(e) {
+    if (e.key === 'Enter') {
+      var h = await sha256(input.value);
+      if (h !== hash) {
+        input.classList.add('error');
+        setTimeout(function() { input.classList.remove('error'); }, 400);
+      }
+    }
+  });
+
+  if (sessionStorage.getItem('lf-auth') === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>

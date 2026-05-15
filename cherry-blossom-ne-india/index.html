@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherry Blossom Special — Northeast India | Nov 15–26, 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf7f2;
+            color: #2d2a26;
+            line-height: 1.6;
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #f8c8d4 0%, #f5a0b5 25%, #e88fa5 50%, #d4778f 75%, #c06070 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,200,210,0.4) 0%, transparent 50%);
+        }
+
+        .petals {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 220, 230, 0.7);
+            border-radius: 50% 0 50% 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-content .organizer {
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+        }
+
+        .hero-content h1 span {
+            display: block;
+            font-size: 0.4em;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .hero-content .dates {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: #fff;
+            margin: 1.5rem 0;
+            letter-spacing: 1px;
+        }
+
+        .hero-content .tagline {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 550px;
+            margin: 0 auto 2rem;
+            font-style: italic;
+        }
+
+        .hero-content .regions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .region-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Highlights bar */
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1px;
+            background: #e8e0d6;
+        }
+
+        .highlight-item {
+            background: #fff;
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .highlight-item .icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .highlight-item .label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #999; }
+        .highlight-item .value { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: #2d2a26; }
+
+        /* Inclusions */
+        .inclusions {
+            background: #fff;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .inclusions h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #2d2a26;
+        }
+
+        .inclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .inclusion-card {
+            background: #faf7f2;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .inclusion-card .ic-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .inclusion-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .inclusion-card p { font-size: 0.85rem; color: #777; }
+
+        /* Itinerary */
+        .itinerary {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .itinerary > h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .itinerary > p.subtitle {
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+        }
+
+        .phase {
+            margin-bottom: 3rem;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid;
+        }
+
+        .phase-header.kaziranga { border-color: #6b8f3a; }
+        .phase-header.tawang { border-color: #4a7fb5; }
+        .phase-header.meghalaya { border-color: #d4778f; }
+
+        .phase-header .phase-icon { font-size: 1.5rem; }
+        .phase-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .phase-header .phase-dates { font-size: 0.85rem; color: #999; margin-left: auto; }
+
+        .day-card {
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s;
+        }
+
+        .day-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .day-header {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            gap: 1rem;
+            user-select: none;
+        }
+
+        .day-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .day-number .dn-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.85; }
+        .day-number .dn-num { font-size: 1.2rem; line-height: 1; }
+
+        .kaziranga .day-number { background: #6b8f3a; }
+        .tawang .day-number { background: #4a7fb5; }
+        .meghalaya .day-number { background: #d4778f; }
+
+        .day-title-block { flex: 1; }
+        .day-title { font-weight: 600; font-size: 1.05rem; }
+        .day-route { font-size: 0.8rem; color: #999; margin-top: 2px; }
+
+        .day-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            background: #f0ece5;
+            color: #777;
+        }
+
+        .day-toggle {
+            font-size: 1.2rem;
+            color: #ccc;
+            transition: transform 0.3s;
+        }
+
+        .day-card.open .day-toggle { transform: rotate(180deg); }
+
+        .day-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .day-card.open .day-body {
+            max-height: 800px;
+        }
+
+        .day-content {
+            padding: 0 1.5rem 1.5rem;
+            padding-left: calc(1.5rem + 48px + 1rem);
+        }
+
+        .day-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .day-content li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .day-content li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #d4d0c8;
+        }
+
+        .day-content .drive-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #f7f4ef;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        .day-content .highlight-note {
+            margin-top: 0.8rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .kaziranga .highlight-note { background: #f0f5e8; color: #5a7a2e; }
+        .tawang .highlight-note { background: #e8f0f8; color: #3a6a9a; }
+        .meghalaya .highlight-note { background: #fdf0f3; color: #b05a6a; }
+
+        /* Assumptions */
+        .assumptions {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .assumptions-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        }
+
+        .assumptions-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .assumptions-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .assumptions-box li {
+            padding: 0.5rem 0;
+            font-size: 0.88rem;
+            color: #666;
+            border-bottom: 1px solid #f0ece5;
+            padding-left: 1.4rem;
+            position: relative;
+        }
+
+        .assumptions-box li::before {
+            content: '*';
+            position: absolute;
+            left: 0;
+            color: #d4778f;
+            font-weight: 700;
+        }
+
+        .assumptions-box li:last-child { border-bottom: none; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #2d2a26;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+        }
+
+        footer strong {
+            color: rgba(255,255,255,0.8);
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .day-content { padding-left: 1.5rem; }
+            .day-tags { display: none; }
+            .phase-header .phase-dates { display: none; }
+            .region-badge { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="petals" id="petals"></div>
+    <div class="hero-content">
+        <div class="organizer">Prakruti Treks &amp; Tours</div>
+        <h1>Cherry Blossom Special<span>Northeast India</span></h1>
+        <div class="dates">15 &mdash; 26 November 2026 &nbsp;&middot;&nbsp; 12 Days</div>
+        <p class="tagline">"Why spend lakhs in Japan when India's own cherry blossoms bloom just as beautifully in Shillong?"</p>
+        <div class="regions">
+            <span class="region-badge">Assam &middot; Kaziranga</span>
+            <span class="region-badge">Arunachal Pradesh &middot; Tawang</span>
+            <span class="region-badge">Meghalaya &middot; Shillong</span>
+        </div>
+    </div>
+    <div class="scroll-hint">&#8595; Scroll for itinerary</div>
+</section>
+
+<!-- Highlights bar -->
+<div class="highlights">
+    <div class="highlight-item">
+        <div class="icon">&#127800;</div>
+        <div class="value">Cherry Blossom Festival</div>
+        <div class="label">Shillong</div>
+    </div>
+    <div class="highlight-item">
+        <div class="icon">&#129423;</div>
+        <div class="value">One-Horned Rhino</div>
+        <div class="label">Kaziranga UNESCO</div>
+    </div>
+    <div class="highlight-item">
+        <div class="icon">&#127956;</div>
+        <div class="value">15,200 ft</div>
+        <div class="label">Indo-China Border</div>
+    </div>
+    <div class="highlight-item">
+        <div class="icon">&#127795;</div>
+        <div class="value">Living Root Bridge</div>
+        <div class="label">Meghalaya</div>
+    </div>
+</div>
+
+<!-- Inclusions -->
+<section class="inclusions">
+    <h2>All Inclusive &mdash; No Hidden Costs</h2>
+    <div class="inclusion-grid">
+        <div class="inclusion-card">
+            <div class="ic-icon">&#127976;</div>
+            <h3>Top-Rated Hotels</h3>
+            <p>Stay at the best-known hotels at every stop</p>
+        </div>
+        <div class="inclusion-card">
+            <div class="ic-icon">&#127858;</div>
+            <h3>Home-Style Kitchen</h3>
+            <p>Rajwadi breakfast, lunch &amp; dinner from a dedicated travel kitchen</p>
+        </div>
+        <div class="inclusion-card">
+            <div class="ic-icon">&#128652;</div>
+            <h3>Luxury Urbania</h3>
+            <p>Comfortable travel throughout in Force Urbania coaches</p>
+        </div>
+        <div class="inclusion-card">
+            <div class="ic-icon">&#127903;</div>
+            <h3>All Safaris &amp; Rides</h3>
+            <p>Elephant &amp; jeep safari, Dawki, Umiam &amp; Ward&rsquo;s Lake boating included</p>
+        </div>
+    </div>
+</section>
+
+<!-- Itinerary -->
+<section class="itinerary">
+    <h2>Day-by-Day Itinerary</h2>
+    <p class="subtitle">Click any day to expand details</p>
+
+    <!-- PHASE 1: Kaziranga -->
+    <div class="phase">
+        <div class="phase-header kaziranga">
+            <span class="phase-icon">&#129423;</span>
+            <h3>Assam &mdash; Kaziranga</h3>
+            <span class="phase-dates">Nov 15 &ndash; 17</span>
+        </div>
+
+        <div class="day-card kaziranga open">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">1</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Arrival &amp; Journey to Kaziranga</div>
+                    <div class="day-route">Guwahati &rarr; Kaziranga &nbsp;(~5 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">travel</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Arrive at Guwahati (Lokpriya Gopinath Bordoloi International Airport)</li>
+                        <li>Meet the Prakruti Treks team; board the Urbania coach</li>
+                        <li>Scenic drive along NH-37 through the Brahmaputra valley</li>
+                        <li>Check in to hotel at Kaziranga; welcome dinner</li>
+                    </ul>
+                    <div class="drive-info">&#128663; ~230 km &middot; 5 hrs via NH-37</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card kaziranga">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">2</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Kaziranga Safari Day</div>
+                    <div class="day-route">Kaziranga National Park</div>
+                </div>
+                <div class="day-tags"><span class="tag">safari</span><span class="tag">UNESCO</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li><strong>Early morning:</strong> Elephant safari at the Central Range &mdash; spot the iconic one-horned rhinoceros up close</li>
+                        <li><strong>Forenoon:</strong> Jeep safari through the Western Range &mdash; look out for wild buffalo, elephants, deer, and migratory birds</li>
+                        <li>Return to hotel for lunch and afternoon rest</li>
+                        <li><strong>Evening:</strong> Bihu folk dance performance &amp; cultural programme</li>
+                    </ul>
+                    <div class="highlight-note">Kaziranga is home to two-thirds of the world's great one-horned rhinoceros &mdash; a UNESCO World Heritage Site since 1985.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card kaziranga">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">3</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Kaziranga to Tezpur</div>
+                    <div class="day-route">Kaziranga &rarr; Tezpur &nbsp;(~2.5 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">travel</span><span class="tag">transition</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Morning at leisure or optional second jeep safari</li>
+                        <li>Depart for Tezpur, the gateway to Arunachal Pradesh</li>
+                        <li>Explore Agnigarh Hill and Cole Park en route</li>
+                        <li>Check in to hotel in Tezpur; evening free</li>
+                    </ul>
+                    <div class="drive-info">&#128663; ~80 km &middot; 2.5 hrs</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHASE 2: Tawang -->
+    <div class="phase">
+        <div class="phase-header tawang">
+            <span class="phase-icon">&#127956;</span>
+            <h3>Arunachal Pradesh &mdash; Tawang</h3>
+            <span class="phase-dates">Nov 18 &ndash; 22</span>
+        </div>
+
+        <div class="day-card tawang">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">4</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Tezpur to Bomdila</div>
+                    <div class="day-route">Tezpur &rarr; Bomdila &nbsp;(~7 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">mountain pass</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Early departure; enter Arunachal Pradesh at Bhalukpong checkpost (ILP required)</li>
+                        <li>Winding ascent through alpine forests to Bomdila (~8,500 ft)</li>
+                        <li>Visit Bomdila Monastery for panoramic Himalayan views</li>
+                        <li>Overnight in Bomdila &mdash; acclimatise to altitude</li>
+                    </ul>
+                    <div class="drive-info">&#128663; ~180 km &middot; 7 hrs mountain roads</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card tawang">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">5</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Bomdila to Tawang via Sela Pass</div>
+                    <div class="day-route">Bomdila &rarr; Tawang &nbsp;(~7 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">13,700 ft</span><span class="tag">waterfall</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Cross the breathtaking Sela Pass (13,700 ft) &mdash; snow-capped peaks and prayer flags</li>
+                        <li>Stop at Sela Lake and Jaswant Garh War Memorial</li>
+                        <li><strong>Jang Waterfalls</strong> &mdash; stunning cascade en route to Tawang</li>
+                        <li>Arrive in Tawang; check in and rest</li>
+                    </ul>
+                    <div class="drive-info">&#128663; ~180 km &middot; 7 hrs via Sela Pass</div>
+                    <div class="highlight-note">Sela Pass at 13,700 ft offers one of India's most dramatic mountain crossings, often dusted with early snow in November.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card tawang">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">6</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Tawang Monastery &amp; Indo-China Border</div>
+                    <div class="day-route">Tawang &rarr; Bumla Pass &rarr; Tawang</div>
+                </div>
+                <div class="day-tags"><span class="tag">15,200 ft</span><span class="tag">border</span><span class="tag">monastery</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li><strong>Morning:</strong> Visit <strong>Tawang Monastery</strong> &mdash; the largest Buddhist monastery in India and second-largest in the world after Lhasa</li>
+                        <li><strong>Midday:</strong> Drive to <strong>Bumla Pass (15,200 ft)</strong> &mdash; the Indo-China border point with Indian Army post</li>
+                        <li>Stop at Madhuri Lake (Sangetsar Tso) on the return</li>
+                        <li>Evening: Explore Tawang town and local market</li>
+                    </ul>
+                    <div class="highlight-note">Standing at 15,200 ft at the India-China border is a once-in-a-lifetime experience. Army permission is required and arranged by the tour.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card tawang">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">7</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Tawang to Bomdila</div>
+                    <div class="day-route">Tawang &rarr; Bomdila &nbsp;(~7 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">return</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Morning free in Tawang; visit the Craft Centre or Ani Gompa nunnery</li>
+                        <li>Depart for Bomdila; second crossing of Sela Pass &mdash; different light, fresh views</li>
+                        <li>Evening arrival in Bomdila; explore the local market</li>
+                    </ul>
+                    <div class="drive-info">&#128663; ~180 km &middot; 7 hrs mountain roads</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card tawang">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">8</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Bomdila to Guwahati</div>
+                    <div class="day-route">Bomdila &rarr; Guwahati &nbsp;(~9 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">long drive</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Early departure; descend from the mountains through Bhalukpong</li>
+                        <li>Drive along the Brahmaputra plains back to Guwahati</li>
+                        <li>Arrive by evening; check in to hotel; rest and recharge</li>
+                    </ul>
+                    <div class="drive-info">&#128663; ~350 km &middot; 9 hrs</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHASE 3: Meghalaya -->
+    <div class="phase">
+        <div class="phase-header meghalaya">
+            <span class="phase-icon">&#127800;</span>
+            <h3>Meghalaya &mdash; Shillong &amp; Cherrapunji</h3>
+            <span class="phase-dates">Nov 23 &ndash; 26</span>
+        </div>
+
+        <div class="day-card meghalaya">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">9</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Guwahati to Shillong &amp; Cherry Blossom Festival</div>
+                    <div class="day-route">Guwahati &rarr; Shillong &nbsp;(~3 hrs)</div>
+                </div>
+                <div class="day-tags"><span class="tag">cherry blossom</span><span class="tag">lake</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li>Drive to Shillong, "The Scotland of the East"</li>
+                        <li>Stop at <strong>Umiam Lake</strong> &mdash; scenic boat ride on the emerald waters</li>
+                        <li><strong>Afternoon:</strong> Attend the <strong>Cherry Blossom Festival</strong> &mdash; pink-and-white blossoms lining the streets, live music, local food stalls</li>
+                        <li>Evening stroll at <strong>Ward&rsquo;s Lake</strong> with boating</li>
+                    </ul>
+                    <div class="highlight-note">Shillong's Cherry Blossom Festival is one of the only such celebrations in India &mdash; the Himalayan cherry trees (Prunus cerasoides) paint the city pink every November.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card meghalaya">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">10</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Shillong Sightseeing</div>
+                    <div class="day-route">Shillong &amp; surroundings</div>
+                </div>
+                <div class="day-tags"><span class="tag">canyon</span><span class="tag">orchids</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li><strong>Morning:</strong> <strong>Laitlum Canyon</strong> &mdash; "End of the Hills" &mdash; dramatic misty gorge with sweeping valley views</li>
+                        <li><strong>Afternoon:</strong> Visit the <strong>Orchid Garden</strong> &mdash; home to rare species from across the Khasi hills</li>
+                        <li>More Cherry Blossom Festival events if continuing</li>
+                        <li>Free time to explore Police Bazar and local Khasi cuisine</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card meghalaya">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">11</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Cherrapunji &mdash; Waterfalls, Caves &amp; Root Bridges</div>
+                    <div class="day-route">Shillong &rarr; Cherrapunji &rarr; Shillong &nbsp;(~3 hrs each way)</div>
+                </div>
+                <div class="day-tags"><span class="tag">waterfall</span><span class="tag">cave</span><span class="tag">root bridge</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li><strong>Nohkalikai Falls</strong> &mdash; India's tallest plunge waterfall (1,115 ft) with a turquoise pool below</li>
+                        <li><strong>Seven Sisters Waterfalls</strong> &mdash; seven segmented streams cascading down the cliff</li>
+                        <li><strong>Mawsmai Cave</strong> &mdash; walk through illuminated limestone formations</li>
+                        <li><strong>Garden of Caves</strong> &mdash; a natural park with cascades, rock formations, and lush greenery</li>
+                        <li>Visit <strong>Mawlynnong</strong> &mdash; the cleanest village in Asia; walk the <strong>Living Root Bridge</strong> woven from Ficus elastica roots over centuries</li>
+                    </ul>
+                    <div class="highlight-note">The Living Root Bridges of Meghalaya are grown, not built &mdash; Khasi people have trained tree roots across rivers for over 500 years.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-card meghalaya">
+            <div class="day-header" onclick="toggle(this)">
+                <div class="day-number"><span class="dn-label">Day</span><span class="dn-num">12</span></div>
+                <div class="day-title-block">
+                    <div class="day-title">Dawki &amp; Departure</div>
+                    <div class="day-route">Shillong &rarr; Dawki &rarr; Guwahati Airport</div>
+                </div>
+                <div class="day-tags"><span class="tag">boat ride</span><span class="tag">departure</span></div>
+                <div class="day-toggle">&#9662;</div>
+            </div>
+            <div class="day-body">
+                <div class="day-content">
+                    <ul>
+                        <li><strong>Early morning:</strong> Drive to Dawki (~2.5 hrs from Shillong)</li>
+                        <li><strong>Dawki River (Umngot) boat ride</strong> &mdash; the crystal-clear waters make boats appear to float in mid-air</li>
+                        <li>Drive to Guwahati Airport (~4 hrs) for departure flights</li>
+                        <li>Tour concludes with memories of a lifetime</li>
+                    </ul>
+                    <div class="drive-info">&#128663; Dawki ~95 km from Shillong &middot; Guwahati Airport ~180 km from Dawki</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Assumptions -->
+<section class="assumptions">
+    <div class="assumptions-box">
+        <h2>Assumptions &amp; Notes</h2>
+        <ul>
+            <li><strong>Gateway city:</strong> Guwahati (LGBI Airport) assumed as the arrival and departure point, as it's the nearest major airport to all three regions.</li>
+            <li><strong>Route order:</strong> Kaziranga first (eastward from Guwahati), then north to Tawang, then south to Meghalaya. This minimises backtracking and saves Shillong's Cherry Blossom Festival for the last leg when it's most likely in full bloom.</li>
+            <li><strong>Tawang leg (5 days):</strong> Bomdila is used as an overnight halt in each direction because the Tezpur-to-Tawang drive (~12 hrs) is too long for a single day, especially on mountain roads.</li>
+            <li><strong>Bumla Pass army permit:</strong> Assumed to be pre-arranged by the tour operator. Civilian visits require Indian Army permission, sometimes cancelled due to weather or security. BSNL is the only network at Bumla.</li>
+            <li><strong>Inner Line Permit (ILP):</strong> Required for Indian citizens entering Arunachal Pradesh. Assumed arranged by the operator in advance.</li>
+            <li><strong>Mawlynnong &amp; Living Root Bridge</strong> are clubbed with the Cherrapunji day. In reality this is a packed day &mdash; the operator may split across two days or adjust based on group pace.</li>
+            <li><strong>Dawki on departure day:</strong> Assumes evening/late-afternoon flights from Guwahati. For early flights, Dawki may be moved to Day 11 instead.</li>
+            <li><strong>Drive times</strong> are best-case estimates for November conditions. Mountain roads to Tawang can add 1&ndash;2 hours depending on weather, convoys, and road work.</li>
+            <li><strong>Cherry Blossom Festival dates</strong> are typically mid-to-late November, matching this tour's Shillong leg (Nov 23&ndash;25). Exact festival dates are announced by the Meghalaya government closer to the event.</li>
+            <li><strong>Urbania coaches</strong> are used on plains and highways. For Tawang mountain roads, smaller vehicles (Innova/Bolero) may be substituted for safety and manoeuvrability.</li>
+            <li><strong>Meals:</strong> "Rajwadi" refers to a dedicated Gujarati/Rajasthani-style travel kitchen, common for Gujarat-based tour operators catering to vegetarian groups.</li>
+            <li><strong>November weather:</strong> Expect 5&ndash;15°C in Shillong, sub-zero at Bumla Pass. Warm layers and rain gear recommended.</li>
+        </ul>
+    </div>
+</section>
+
+<footer>
+    <strong>Prakruti Treks &amp; Tours</strong>
+    Cherry Blossom Special &middot; November 15&ndash;26, 2026
+</footer>
+
+<script>
+    // Falling petals
+    const petalsContainer = document.getElementById('petals');
+    for (let i = 0; i < 25; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.animationDuration = (6 + Math.random() * 8) + 's';
+        petal.style.animationDelay = Math.random() * 10 + 's';
+        petal.style.width = (8 + Math.random() * 10) + 'px';
+        petal.style.height = petal.style.width;
+        petal.style.opacity = 0.3 + Math.random() * 0.5;
+        petalsContainer.appendChild(petal);
+    }
+
+    // Accordion toggle
+    function toggle(header) {
+        header.closest('.day-card').classList.toggle('open');
+    }
+</script>
+</body>
+</html>

@@ -332,6 +332,72 @@
     cursor: default;
   }
 
+  .stat-row {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+  }
+
+  .stat-card .number {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .stat-card .number.red { color: var(--highlight); }
+
+  .stat-card .desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+
+  .scenario {
+    background: #f7f5f0;
+    border-radius: 10px;
+    padding: 1.5rem 1.6rem;
+    margin: 1.8rem 0;
+  }
+
+  .scenario .scenario-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-bottom: 0.6rem;
+  }
+
+  .scenario p:last-child { margin-bottom: 0; }
+
+  .closing {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--accent);
+  }
+
+  .closing p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .stat-row { flex-direction: column; gap: 0.7rem; }
+  }
+
   @media (max-width: 600px) {
     .container { padding: 2rem 1rem 3rem; }
     h1 { font-size: 1.7rem; }
@@ -549,22 +615,112 @@ If the drug genuinely reduces collagen deposition by 20%, but a substantial frac
 A continuous, quantitative collagen readout &mdash; one that can detect a 15% reduction in collagen area, or a shift in the mature/immature collagen ratio &mdash; would detect the same treatment effect with fewer patients and shorter follow-up. This isn't hypothetical: it's why HistoIndex, PathAI, and others are building quantitative fibrosis tools, and why pharma is actively seeking them. The insight specific to autofluorescence is that it adds <em>collagen biology</em> (maturity, crosslinking) on top of collagen quantity, which no digital pathology tool working from trichrome images can do.
 </p>
 
-<h2>Beyond MASH: What Else This Unlocks</h2>
-
-<h3>Immunotherapy response prediction</h3>
+<h2>Beyond MASH: The Cancer Problem</h2>
 
 <p>
-The metabolic state of tumor-infiltrating immune cells determines whether they're capable of killing cancer cells. Activated, functional T cells are glycolytic (high NAD(P)H, low FAD). Exhausted T cells shift toward oxidative metabolism. This metabolic phenotype &mdash; which directly determines immunotherapy response &mdash; is readable via autofluorescence and fluorescence lifetime imaging. It is not readable on H&E. It is not readable on PD-L1 IHC. It is, at present, essentially invisible in clinical pathology.
+MASH fibrosis is the first wedge &mdash; the most tractable proof of platform value. But the deeper opportunity, and the reason this platform matters beyond hepatology, is cancer.
+</p>
+
+<h3>The immunotherapy crisis</h3>
+
+<p>
+Checkpoint inhibitors are the most important advance in cancer treatment in a generation. Pembrolizumab (Keytruda) alone is approved across 17 tumor types. Global IO drug sales exceeded $50 billion in 2024. The drugs work &mdash; when they work. The problem is that for most patients, they don't.
+</p>
+
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="number red">~70%</div>
+    <div class="desc">of patients given checkpoint inhibitors do not respond</div>
+  </div>
+  <div class="stat-card">
+    <div class="number red">30&ndash;40%</div>
+    <div class="desc">predictive accuracy of PD-L1, the standard biomarker</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">$150K+</div>
+    <div class="desc">annual cost per patient for checkpoint inhibitor therapy</div>
+  </div>
+</div>
+
+<p>
+This is not an abstract problem. A patient with metastatic melanoma or non-small cell lung cancer sits across from an oncologist who has to decide: do we try immunotherapy, or go straight to chemotherapy? The standard biomarker &mdash; PD-L1 expression, read by a pathologist on IHC &mdash; predicts response barely better than chance for many indications. So the oncologist makes their best guess, starts the drug, and waits 8&ndash;12 weeks for a CT scan to see if the tumor shrank.
 </p>
 
 <p>
-Two out of three patients given checkpoint inhibitors don't respond. The best current biomarker (PD-L1 expression, read by a pathologist on IHC) predicts response only 30&ndash;40% of the time. The metabolic state of the immune infiltrate is the mechanism behind the response, and it's optically accessible without staining.
+If it didn't &mdash; and in the majority of cases, it didn't &mdash; the patient spent months on an ineffective drug with real toxicity (autoimmune reactions, fatigue, organ inflammation), while the cancer continued to progress. They lost time they didn't have.
+</p>
+
+<div class="key-point">
+<p>
+<strong>The biological mechanism is known.</strong> Whether a patient's immune system can kill their cancer depends on the metabolic state of the tumor-infiltrating immune cells. Activated, functional T cells are glycolytic (high NAD(P)H, low FAD). Exhausted T cells &mdash; the ones that have given up &mdash; shift toward oxidative metabolism. This metabolic phenotype directly determines whether immunotherapy will re-activate the immune response or fail. It is readable via autofluorescence. It is not readable on H&E. It is not readable on PD-L1 IHC. It is, at present, invisible in clinical pathology.
+</p>
+</div>
+
+<p>
+The optical redox ratio &mdash; NAD(P)H fluorescence divided by FAD fluorescence &mdash; is a direct, real-time readout of this metabolic state. Published work from Walsh and Skala at the University of Wisconsin has demonstrated that optical metabolic imaging can distinguish therapy-responsive from therapy-resistant cancer and immune cells in organoid models and fresh tissue.<sup>5</sup> The signal is there. No one has built a clinical platform to read it from patient biopsies at scale.
+</p>
+
+<div class="scenario">
+  <div class="scenario-label">What this looks like in practice</div>
+  <p>
+    A patient is diagnosed with non-small cell lung cancer. A biopsy is taken. Before staining, the tissue is imaged on our platform. The autofluorescence readout shows: high glycolytic activity in the tumor-infiltrating lymphocytes, favorable NAD(P)H/FAD ratio, metabolically active immune microenvironment. The report says: <em>this patient's immune cells are metabolically primed for checkpoint inhibitor response.</em> The oncologist starts pembrolizumab with confidence rather than hope.
+  </p>
+  <p>
+    Another patient, same cancer type. The readout shows: oxidative metabolism in the immune infiltrate, low glycolytic signature, exhausted T cell phenotype. The report says: <em>low likelihood of single-agent checkpoint inhibitor response. Consider combination therapy or alternative approach.</em> The oncologist skips directly to a strategy more likely to work. No wasted months. No unnecessary toxicity.
+  </p>
+</div>
+
+<p>
+This is a companion diagnostic (CDx) &mdash; a test that determines who should receive a specific drug. In the IO space, a CDx that genuinely predicts checkpoint inhibitor response would be one of the most valuable diagnostic products in medicine. Keytruda alone generates $25B+ in annual revenue; a CDx tied to that program earns royalties on every prescription it enables. The commercial opportunity is enormous &mdash; but the reason it matters is the patients.
+</p>
+
+<h3>Seeing treatment failure before the tumor grows</h3>
+
+<p>
+Today, oncologists assess treatment response by waiting for imaging. Did the tumor shrink on the CT scan at 8&ndash;12 weeks? This is measuring the downstream consequence (tumor volume) rather than the upstream cause (metabolic response to therapy).
+</p>
+
+<p>
+Metabolic changes precede volumetric changes. A tumor that is responding to treatment shifts its metabolic profile &mdash; decreased glycolysis, increased apoptotic signatures, altered redox state &mdash; before it physically shrinks. Conversely, a tumor that is developing resistance shifts toward survival metabolism before it starts growing again on imaging.
+</p>
+
+<p>
+A biopsy taken during treatment, imaged for autofluorescence, could detect these metabolic shifts weeks before a CT scan shows anything. For a patient on a drug that isn't working, that's weeks of their life reclaimed. For a patient on a drug that is working, it's early confirmation to continue. This is treatment response monitoring &mdash; reading the tumor's metabolic reaction to therapy in near-real-time from tissue.
+</p>
+
+<h3>Mapping the tumor ecosystem</h3>
+
+<p>
+A tumor is not a mass of identical cancer cells. It's an ecosystem: cancer cells with different metabolic phenotypes, immune cells in various states of activation and exhaustion, cancer-associated fibroblasts remodeling the stroma, endothelial cells building vasculature. Each cell type has a distinct metabolic signature. Each one fluoresces differently.
+</p>
+
+<p>
+Multi-channel autofluorescence imaging of a tumor section produces a spatial metabolic map &mdash; which regions are glycolytic, which are oxidative, where the immune cells are active, where the stroma is fibrotic. This is what spatial transcriptomics tries to do at $1,000+ per slide with multi-day turnaround. Autofluorescence captures a different but complementary layer of information &mdash; function rather than gene expression &mdash; in minutes, non-destructively, at a fraction of the cost. And because it's non-destructive, the same section can subsequently be used for spatial transcriptomics, giving you both layers from one tissue section.
 </p>
 
 <h3>Surgical margins</h3>
 
 <p>
-Intraoperative frozen section answers "tumor cells present at margin, yes or no." It cannot distinguish active tumor from treatment-effect changes. It cannot read tissue viability or metabolic state at the margin. A rapid autofluorescence scan of a fresh, unstained margin could provide richer information in less time than frozen section &mdash; without the artifacts that freezing introduces.
+When a surgeon removes a tumor, the critical question is: did they get it all? Currently, this is answered by frozen-section pathology &mdash; tissue is frozen, cut, stained, and read by a pathologist while the patient is still on the table. The answer is binary: tumor cells at the margin, yes or no.
+</p>
+
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="number red">20&ndash;30%</div>
+    <div class="desc">of breast-conserving surgery patients require re-excision due to positive margins</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">30&ndash;45 min</div>
+    <div class="desc">typical wait time for frozen section results during surgery</div>
+  </div>
+</div>
+
+<p>
+Frozen section can't distinguish active tumor from treatment-regressed tumor. It can't assess tissue viability at the margin. It can't predict local recurrence risk. And the freezing process introduces artifacts that make interpretation harder.
+</p>
+
+<p>
+A rapid autofluorescence scan of a fresh, unstained surgical margin &mdash; no freezing, no staining, no waiting &mdash; could provide richer information in less time. Metabolic signatures distinguish viable tumor from necrotic tissue. Collagen autofluorescence reveals stromal invasion patterns. The scan takes minutes, preserves the tissue for subsequent analysis, and adds functional information that frozen section physically cannot provide.
 </p>
 
 <h3>Non-destructive multiplexing</h3>
@@ -573,7 +729,59 @@ Intraoperative frozen section answers "tumor cells present at margin, yes or no.
 Every stain is a one-way door. Once tissue is stained, that section is committed. If you want H&E <em>and</em> trichrome <em>and</em> IHC <em>and</em> IF, you need serial sections, and with small biopsies, you run out of tissue.
 </p>
 <p>
-Autofluorescence imaging is non-destructive. The section that was imaged for collagen autofluorescence can subsequently be stained with H&E, then destained and restained for IHC, or used for spatial transcriptomics. One biopsy, every assay. This is especially valuable for small-needle biopsies where tissue is precious &mdash; exactly the situation in liver biopsy for MASH.
+Autofluorescence imaging is non-destructive. The section that was imaged for collagen autofluorescence can subsequently be stained with H&E, then destained and restained for IHC, or used for spatial transcriptomics. One biopsy, every assay, every time. This is especially valuable for small-needle biopsies where tissue is precious &mdash; exactly the situation in liver biopsy for MASH, and equally critical in oncology, where a core needle biopsy of a deep tumor may be all you ever get.
+</p>
+
+<h2>The Shape of the Opportunity</h2>
+
+<p>
+This is not a niche tool for a single disease. It's a new imaging modality entering clinical pathology &mdash; a platform that captures information no existing instrument can see, applied across the diagnostic landscape.
+</p>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Application</th>
+      <th>What it replaces or augments</th>
+      <th>Market context</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="question-col">MASH fibrosis quantification</td>
+      <td>Trichrome staging by eye</td>
+      <td>MASH drug pipeline: 50+ active clinical programs, each needing better histological endpoints</td>
+    </tr>
+    <tr>
+      <td class="question-col">IO companion diagnostic</td>
+      <td>PD-L1 IHC</td>
+      <td>Checkpoint inhibitor market: $50B+/year in drug sales; CDx earns royalties on prescriptions enabled</td>
+    </tr>
+    <tr>
+      <td class="question-col">Treatment response monitoring</td>
+      <td>Waiting 8&ndash;12 weeks for CT</td>
+      <td>Every oncology patient on systemic therapy is a potential use case</td>
+    </tr>
+    <tr>
+      <td class="question-col">Intraoperative margins</td>
+      <td>Frozen section pathology</td>
+      <td>600K+ cancer surgeries/year in the US alone where margin status matters</td>
+    </tr>
+    <tr>
+      <td class="question-col">Spatial metabolic profiling</td>
+      <td>Complements spatial transcriptomics</td>
+      <td>Spatial biology market projected at $3B+ by 2028</td>
+    </tr>
+    <tr>
+      <td class="question-col">Transplant pathology</td>
+      <td>H&E-based rejection grading</td>
+      <td>Metabolic stress in grafts is an early indicator of rejection, invisible on H&E</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+The platform economics follow the pattern of every successful diagnostic instrument company: hardware is the foothold, assays are the recurring revenue. One instrument in a pathology lab or pharma research site; multiple validated readouts, each billable, each expanding the clinical value of the installed base. Every new assay developed on the platform compounds the data moat and deepens the switching cost. This is the Illumina model applied to pathology.
 </p>
 
 <h2>What's Actually New Here</h2>
@@ -591,34 +799,45 @@ Autofluorescence microscopy is not new. Pathologists have known tissue fluoresce
 </p>
 
 <p>
-<strong>Clinical pull.</strong> MASH drug approvals created a market that <em>depends</em> on better histological endpoints. Immuno-oncology biomarker programs are actively seeking response-prediction tools beyond PD-L1. For the first time, the buyer is looking for this.
+<strong>Clinical pull.</strong> MASH drug approvals created a market that <em>depends</em> on better histological endpoints. Immuno-oncology biomarker leaders at every major pharma company are actively searching for response prediction better than PD-L1. For the first time, the buyer is leaning in.
 </p>
 
 <div class="key-point">
 <p>
-<strong>The analogy:</strong> Radiology had X-ray for decades before MRI. X-ray showed structure &mdash; bones, masses, air. MRI added a new physical signal &mdash; proton relaxation in magnetic fields &mdash; that revealed soft tissue contrast, diffusion, perfusion, function. It didn't replace X-ray. It saw what X-ray couldn't. This is the same idea applied to pathology: a new physical signal, from the same tissue, revealing biology that stains cannot access.
+<strong>The analogy:</strong> Radiology had X-ray for decades before MRI. X-ray showed structure &mdash; bones, masses, air. MRI added a new physical signal &mdash; proton relaxation in magnetic fields &mdash; that revealed soft tissue contrast, diffusion, perfusion, function. It didn't replace X-ray. It saw what X-ray couldn't. MRI became a $8B+/year market and unlocked an entire generation of diagnoses that were previously invisible. This is the same idea applied to pathology: a new physical signal, from the same tissue, revealing biology that stains cannot access.
 </p>
 </div>
 
+<div class="closing">
 <h2>In Summary</h2>
 
 <p>
-A GI pathologist reading trichrome sees collagen architecture with expert eyes. That skill is real, hard-won, and clinically valuable. Nothing here diminishes it.
+A GI pathologist reading trichrome sees collagen architecture with expert eyes. An oncologic pathologist reading H&E sees cellular morphology with extraordinary precision. Those skills are real, hard-won, and clinically valuable. Nothing here diminishes them.
 </p>
 
 <p>
-The claim is narrower and more specific: <em>stained tissue contains less information than unstained tissue.</em> The act of staining highlights one thing by washing out everything else. The native optical signals in unstained tissue &mdash; autofluorescence from metabolic cofactors, spectral shifts from collagen crosslinking, fluorescence lifetime from molecular environment &mdash; encode biology that no stain reveals, because no stain was designed to.
+The claim is narrower and more specific: <em>stained tissue contains less information than unstained tissue.</em> The act of staining highlights one thing by washing out everything else. The native optical signals in unstained tissue &mdash; autofluorescence from metabolic cofactors, spectral shifts from collagen crosslinking, fluorescence lifetime from the molecular environment &mdash; encode biology that no stain reveals, because no stain was designed to.
 </p>
 
 <p>
-The question isn't whether a pathologist can stage fibrosis. She can. The question is whether the staging captures everything the tissue knows. It doesn't. And for the first time, the technology exists to read what's been there all along.
+The question isn't whether a pathologist can stage fibrosis or grade a tumor. She can. The question is whether today's tools capture everything the tissue knows. They don't. The metabolic state of a cancer patient's immune cells &mdash; the single most important predictor of immunotherapy response &mdash; is invisible on every slide in every pathology lab in the world. It doesn't have to be.
 </p>
+
+<p>
+For 150 years, pathology has been one of the most consequential and least changed disciplines in medicine. Radiology got its MRI moment. Genomics got its sequencing moment. Pathology hasn't had its yet.
+</p>
+
+<p>
+This is that moment. The physics is known. The computation is ready. The clinical need is acute. What remains is to build it.
+</p>
+</div>
 
 <div class="footnote">
   <p><sup>1</sup> Davison BA et al. "Suboptimal reliability of liver biopsy evaluation has implications for randomized clinical trials." <em>J Hepatol.</em> 2020;73(6):1322-1332.</p>
   <p><sup>2</sup> Pournik O et al. "Inter-observer and intra-observer agreement in pathological evaluation of non-alcoholic fatty liver disease suspected liver biopsies." <em>Hepat Mon.</em> 2014;14(1):e12247.</p>
   <p><sup>3</sup> Rivenson Y et al. "Virtual histological staining of unlabelled tissue autofluorescence images via deep learning." <em>Nat Biomed Eng.</em> 2019;3(6):466-477.</p>
   <p><sup>4</sup> Li D et al. "Deep learning for virtual histological staining of bright-field microscopy images." <em>BME Frontiers.</em> 2022.</p>
+  <p><sup>5</sup> Walsh AJ, Skala MC. "Optical metabolic imaging quantifies heterogeneous cell populations." <em>Biomed Opt Express.</em> 2015;6(2):559-573.</p>
 </div>
 
 </div>

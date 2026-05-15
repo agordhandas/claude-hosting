@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude for Legal — What It Does and Where the Boundary Is</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: 1080px 1350px; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #e8e8e0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .slide {
+    width: 1080px;
+    height: 1350px;
+    background: #ffffff;
+    padding: 80px 72px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+
+  .slide:last-child { page-break-after: avoid; }
+
+  /* Subtle teal accent line at top */
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 72px;
+    right: 72px;
+    height: 4px;
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
+    border-radius: 0 0 2px 2px;
+  }
+
+  /* Slide number */
+  .slide-num {
+    position: absolute;
+    top: 32px;
+    right: 72px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(26, 43, 74, 0.2);
+    letter-spacing: 0.05em;
+  }
+
+  /* Logo footer */
+  .slide-footer {
+    position: absolute;
+    bottom: 48px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slide-footer svg { width: 120px; height: 60px; }
+
+  .slide-footer .url {
+    font-size: 14px;
+    color: rgba(26, 43, 74, 0.3);
+  }
+
+  /* Typography */
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 54px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #1a2b4a;
+  }
+
+  h1 .teal { color: #0d9488; }
+
+  h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #1a2b4a;
+    margin-bottom: 36px;
+  }
+
+  h2 .teal { color: #0d9488; }
+
+  .subtitle {
+    font-size: 22px;
+    color: rgba(26, 43, 74, 0.5);
+    line-height: 1.5;
+    margin-top: 20px;
+  }
+
+  .body-text {
+    font-size: 22px;
+    color: rgba(26, 43, 74, 0.7);
+    line-height: 1.65;
+  }
+
+  .body-text strong {
+    color: #1a2b4a;
+    font-weight: 600;
+  }
+
+  /* Cover slide */
+  .cover-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cover-tag {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0d9488;
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #1a2b4a;
+    margin-bottom: 32px;
+  }
+
+  .cover-title .teal { color: #0d9488; }
+
+  .cover-sub {
+    font-size: 24px;
+    color: rgba(26, 43, 74, 0.5);
+    line-height: 1.5;
+    max-width: 700px;
+  }
+
+  /* Plugin grid */
+  .plugin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .plugin-item {
+    background: #f8faf9;
+    border: 1px solid rgba(26, 43, 74, 0.06);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+
+  .plugin-name {
+    font-size: 19px;
+    font-weight: 600;
+    color: #1a2b4a;
+    margin-bottom: 4px;
+  }
+
+  .plugin-desc {
+    font-size: 15px;
+    color: rgba(26, 43, 74, 0.5);
+    line-height: 1.4;
+  }
+
+  /* Architecture layers */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .layer {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 28px;
+    border-radius: 14px;
+  }
+
+  .layer-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .layer-1 { background: #f0fdfa; }
+  .layer-1 .layer-num { background: #0d9488; color: white; }
+  .layer-2 { background: #f0f9ff; }
+  .layer-2 .layer-num { background: #1a2b4a; color: white; }
+  .layer-3 { background: #fefce8; }
+  .layer-3 .layer-num { background: #b45309; color: white; }
+  .layer-4 { background: #faf5ff; }
+  .layer-4 .layer-num { background: #7c3aed; color: white; }
+
+  .layer-content { flex: 1; }
+
+  .layer-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #1a2b4a;
+    margin-bottom: 4px;
+  }
+
+  .layer-desc {
+    font-size: 17px;
+    color: rgba(26, 43, 74, 0.55);
+    line-height: 1.5;
+  }
+
+  /* Connector arrow between layers */
+  .layer-arrow {
+    text-align: center;
+    font-size: 24px;
+    color: rgba(26, 43, 74, 0.15);
+    margin: -6px 0;
+    padding-left: 24px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .compare-table th {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(26, 43, 74, 0.4);
+    text-align: left;
+    padding: 0 20px 16px;
+  }
+
+  .compare-table th:nth-child(2) { color: #0d9488; }
+  .compare-table th:nth-child(3) { color: #b45309; }
+
+  .compare-table td {
+    font-size: 18px;
+    color: rgba(26, 43, 74, 0.7);
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(26, 43, 74, 0.05);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .compare-table td:first-child {
+    font-weight: 600;
+    color: #1a2b4a;
+    width: 200px;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .check { color: #0d9488; font-weight: 600; }
+  .cross { color: #dc2626; font-weight: 600; }
+
+  /* Question list */
+  .q-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .q-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .q-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: #0d9488;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .q-text {
+    flex: 1;
+    padding-top: 4px;
+  }
+
+  .q-question {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a2b4a;
+    margin-bottom: 6px;
+  }
+
+  .q-answer {
+    font-size: 17px;
+    color: rgba(26, 43, 74, 0.55);
+    line-height: 1.5;
+  }
+
+  /* Gap items */
+  .gap-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .gap-item {
+    padding: 22px 24px;
+    border-radius: 12px;
+    background: #fef2f2;
+    border-left: 4px solid #dc2626;
+  }
+
+  .gap-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a2b4a;
+    margin-bottom: 4px;
+  }
+
+  .gap-desc {
+    font-size: 16px;
+    color: rgba(26, 43, 74, 0.55);
+    line-height: 1.45;
+  }
+
+  /* Closing slide */
+  .close-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .close-quote {
+    font-family: 'Instrument Serif', serif;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #1a2b4a;
+    margin-bottom: 40px;
+    letter-spacing: -0.01em;
+  }
+
+  .close-quote .teal { color: #0d9488; }
+
+  .close-body {
+    font-size: 22px;
+    color: rgba(26, 43, 74, 0.55);
+    line-height: 1.6;
+    max-width: 750px;
+  }
+
+  /* Divider */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: #0d9488;
+    border-radius: 2px;
+    margin: 32px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Cover -->
+<div class="slide">
+  <div class="slide-num"></div>
+  <div class="cover-content">
+    <div class="cover-tag">Claude for Legal Breakdown</div>
+    <div class="cover-title">What It <span class="teal">Actually Does</span><br>and Where the<br>Boundary Is</div>
+    <div class="cover-sub">12 plugins. 20+ connectors. A four-layer architecture underneath. Here's what matters after a week inside it.</div>
+  </div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)">
+        <path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="78" cy="70" r="5" fill="#0d9488"/>
+      </g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a">
+        <tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan>
+      </text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 2: The 12 Plugins -->
+<div class="slide">
+  <div class="slide-num">2 / 8</div>
+  <h2>The <span class="teal">12 Plugins</span></h2>
+  <div class="body-text" style="margin-bottom: 28px;">Each one maps to where lawyers spend the most time on standardized, repeatable work. Anthropic has the data on which tasks hit Claude most often.</div>
+  <div class="plugin-grid">
+    <div class="plugin-item">
+      <div class="plugin-name">Commercial Legal</div>
+      <div class="plugin-desc">Vendor agreements, NDAs, playbook review</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Corporate Legal</div>
+      <div class="plugin-desc">M&A diligence, closing checklists, board consents</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Employment Legal</div>
+      <div class="plugin-desc">Hires, terminations, classification, investigations</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Privacy Legal</div>
+      <div class="plugin-desc">Data handling, compliance reviews, DPAs</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Product Legal</div>
+      <div class="plugin-desc">Terms of service, user agreements, liability</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Regulatory Legal</div>
+      <div class="plugin-desc">Compliance frameworks, filing requirements</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">AI Governance</div>
+      <div class="plugin-desc">AI policies, risk assessments, EU AI Act</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">IP Legal</div>
+      <div class="plugin-desc">Patent review, trademark analysis, licensing</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Litigation Legal</div>
+      <div class="plugin-desc">Case analysis, motion drafting, discovery</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Legal Builder Hub</div>
+      <div class="plugin-desc">Community-built skills and workflows</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Law Students</div>
+      <div class="plugin-desc">Research training, exam prep, writing practice</div>
+    </div>
+    <div class="plugin-item">
+      <div class="plugin-name">Legal Clinics</div>
+      <div class="plugin-desc">Access-to-justice, pro bono workflow support</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)">
+        <path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/>
+      </g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 3: The Architecture -->
+<div class="slide">
+  <div class="slide-num">3 / 8</div>
+  <h2>The <span class="teal">Four-Layer</span> Architecture</h2>
+  <div class="body-text" style="margin-bottom: 28px;">More interesting than the feature list. This is how Anthropic designed the system to turn tacit legal knowledge into executable AI workflows.</div>
+  <div class="layer-stack">
+    <div class="layer layer-1">
+      <div class="layer-num">1</div>
+      <div class="layer-content">
+        <div class="layer-title">Practice Profile</div>
+        <div class="layer-desc">Cold-start interview that learns your firm's playbooks, escalation chains, risk calibration, and house style. The "who are you" layer.</div>
+      </div>
+    </div>
+    <div class="layer-arrow">&#8595;</div>
+    <div class="layer layer-2">
+      <div class="layer-num">2</div>
+      <div class="layer-content">
+        <div class="layer-title">Skill</div>
+        <div class="layer-desc">The actual task workflows. Contract review against a playbook, diligence checklists, motion drafting. The "how do you do it" layer.</div>
+      </div>
+    </div>
+    <div class="layer-arrow">&#8595;</div>
+    <div class="layer layer-3">
+      <div class="layer-num">3</div>
+      <div class="layer-content">
+        <div class="layer-title">Agent</div>
+        <div class="layer-desc">Coordinates multi-step work. Breaks a complex task into subtasks and runs them. The "when do you do it" layer.</div>
+      </div>
+    </div>
+    <div class="layer-arrow">&#8595;</div>
+    <div class="layer layer-4">
+      <div class="layer-num">4</div>
+      <div class="layer-content">
+        <div class="layer-title">Connector</div>
+        <div class="layer-desc">Wires into iManage, Westlaw, DocuSign, NetDocuments, LexisNexis, Microsoft 365. The "where is the data" layer.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)"><path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/></g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 4: Claude for Word -->
+<div class="slide">
+  <div class="slide-num">4 / 8</div>
+  <h2>Claude for <span class="teal">Word</span></h2>
+  <div class="body-text" style="margin-bottom: 40px;">The one lawyers will actually feel day to day. This is where the tool meets lawyers where they work.</div>
+  <div class="q-list">
+    <div class="q-item">
+      <div class="q-num" style="background: #1a2b4a;">&#10003;</div>
+      <div class="q-text">
+        <div class="q-question">Native Track Changes</div>
+        <div class="q-answer">Proposed edits appear in the revision pane exactly like human markup. Accept or reject individually.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num" style="background: #1a2b4a;">&#10003;</div>
+      <div class="q-text">
+        <div class="q-question">Reads legal document structure</div>
+        <div class="q-answer">Multi-level numbering, defined terms, cross-references, heading hierarchies. Understands how legal documents are organized.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num" style="background: #1a2b4a;">&#10003;</div>
+      <div class="q-text">
+        <div class="q-question">In-document review</div>
+        <div class="q-answer">Review against a playbook, flag deviations, suggest alternative language. All inside the Word document.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num" style="background: #b45309;">!</div>
+      <div class="q-text">
+        <div class="q-question">Single-document scope</div>
+        <div class="q-answer">Works on one document at a time. No multi-document orchestration, cross-matter assembly, or template management.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num" style="background: #dc2626;">&#33;</div>
+      <div class="q-text">
+        <div class="q-question">Prompt injection risk</div>
+        <div class="q-answer">Anthropic warns against using with documents from untrusted sources. Counterparty redlines could contain hidden instructions.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)"><path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/></g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 5: The Methodology -->
+<div class="slide">
+  <div class="slide-num">5 / 8</div>
+  <h2>The <span class="teal">Methodology</span><br>Behind the Plugins</h2>
+  <div class="body-text" style="margin-bottom: 36px;">Every plugin runs on the same four questions. Worth studying even if you never use Claude for Legal. The tools will change. This framework won't.</div>
+  <div class="q-list">
+    <div class="q-item">
+      <div class="q-num">1</div>
+      <div class="q-text">
+        <div class="q-question">Who are you?</div>
+        <div class="q-answer">Practice Profile. Your firm's playbooks, risk calibration, escalation chains, house style. The cold-start interview that teaches the system how your firm operates.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">2</div>
+      <div class="q-text">
+        <div class="q-question">How do you do it?</div>
+        <div class="q-answer">Skills. The specific task workflows: review this contract against this playbook, draft this motion in this structure, run this checklist against these facts.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">3</div>
+      <div class="q-text">
+        <div class="q-question">When do you do it?</div>
+        <div class="q-answer">Agents. Multi-step coordination. Break a complex engagement into phases, run them in sequence or parallel, hand off between steps.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">4</div>
+      <div class="q-text">
+        <div class="q-question">Where is the data?</div>
+        <div class="q-answer">Connectors. iManage, Westlaw, DocuSign, NetDocuments, LexisNexis, Microsoft 365. The system needs to read from and write to where lawyers already work.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)"><path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/></g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 6: Where the Boundary Is -->
+<div class="slide">
+  <div class="slide-num">6 / 8</div>
+  <h2>Where the <span class="teal">Boundary</span> Is</h2>
+  <div class="body-text" style="margin-bottom: 28px;">Every plugin is single-user, single-session. Here's what Claude for Legal handles vs. what it doesn't.</div>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Claude for Legal</th>
+      <th>Still needs custom</th>
+    </tr>
+    <tr>
+      <td>Legal reasoning</td>
+      <td><span class="check">90.9% BigLaw Bench</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Document review</td>
+      <td><span class="check">Single-doc w/ Track Changes</span></td>
+      <td><span class="cross">Multi-doc orchestration</span></td>
+    </tr>
+    <tr>
+      <td>Research</td>
+      <td><span class="check">Westlaw MCP connector</span></td>
+      <td><span class="cross">Auto citation verification</span></td>
+    </tr>
+    <tr>
+      <td>Collaboration</td>
+      <td></td>
+      <td><span class="cross">Shared workspaces, routing</span></td>
+    </tr>
+    <tr>
+      <td>Firm knowledge</td>
+      <td><span class="check">Per-user Practice Profile</span></td>
+      <td><span class="cross">Firm-wide playbook system</span></td>
+    </tr>
+    <tr>
+      <td>Matter mgmt</td>
+      <td></td>
+      <td><span class="cross">Case files, conflicts, billing</span></td>
+    </tr>
+    <tr>
+      <td>Compliance</td>
+      <td></td>
+      <td><span class="cross">Audit trails, ethical walls, DLP</span></td>
+    </tr>
+    <tr>
+      <td>Workflow</td>
+      <td></td>
+      <td><span class="cross">Intake to drafting to review</span></td>
+    </tr>
+  </table>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)"><path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/></g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 7: The Firm's Edge -->
+<div class="slide">
+  <div class="slide-num">7 / 8</div>
+  <h2>Your Firm's <span class="teal">Vertical Edge</span></h2>
+  <div class="body-text" style="margin-bottom: 36px;">Claude's legal knowledge is horizontal. It knows what any lawyer knows. Your firm's competitive advantage is what only your firm knows.</div>
+  <div class="gap-list">
+    <div class="gap-item" style="background: #f0fdfa; border-left-color: #0d9488;">
+      <div class="gap-title">Your playbooks</div>
+      <div class="gap-desc">The 120-page practice guide your senior partner has been refining for 20 years. The checklists, the escalation logic, the house positions.</div>
+    </div>
+    <div class="gap-item" style="background: #f0fdfa; border-left-color: #0d9488;">
+      <div class="gap-title">Your archetypes</div>
+      <div class="gap-desc">The pattern recognition that takes a decade to build. Which cases look alike. Which clients need which approach. Which fact patterns predict which outcomes.</div>
+    </div>
+    <div class="gap-item" style="background: #f0fdfa; border-left-color: #0d9488;">
+      <div class="gap-title">Your precedent clauses</div>
+      <div class="gap-desc">The language your firm has tested in court, negotiated with counterparties, and refined across hundreds of matters.</div>
+    </div>
+    <div class="gap-item" style="background: #f0fdfa; border-left-color: #0d9488;">
+      <div class="gap-title">Your operational workflow</div>
+      <div class="gap-desc">How intake flows to strategy, strategy to drafting, drafting to review. The system that makes your firm run, encoded nowhere right now.</div>
+    </div>
+  </div>
+  <div class="body-text" style="margin-top: 28px;">This is IP no general model has. Connecting it to Claude's reasoning, inside a system your whole firm operates from, is where the real value lives.</div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)"><path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/></g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+<!-- SLIDE 8: Closer -->
+<div class="slide">
+  <div class="slide-num">8 / 8</div>
+  <div class="close-content">
+    <div class="close-quote">Claude is the <span class="teal">reasoning engine</span>.<br><br>Your firm's knowledge is the <span class="teal">competitive advantage</span>.<br><br>The job is connecting them.</div>
+    <div class="divider"></div>
+    <div class="close-body">The firms that win on AI won't be the ones with the most seats. They'll be the ones that turned their institutional knowledge into an operating system, where the playbook routes the work, the system knows the matter, and the team handles judgment calls.</div>
+  </div>
+  <div class="slide-footer">
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+      <g id="icon" transform="translate(12, 30)"><path d="M78,70 C50,70 35,50 8,18" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,68 40,55 15,25" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,66 48,58 25,35" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 25,70 5,70" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,72 25,72 5,78" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C50,68 25,68 5,62" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,70 C50,70 35,90 8,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C55,72 40,85 15,115" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><path d="M78,70 C58,74 48,82 25,105" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/><path d="M78,18 L78,122" fill="none" stroke="#1a2b4a" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="70" r="5" fill="#0d9488"/></g>
+      <text x="115" y="118" font-family="Inter, -apple-system, sans-serif" font-size="42" fill="#1a2b4a"><tspan font-weight="600">eigen</tspan><tspan font-weight="400">omic</tspan></text>
+    </svg>
+    <span class="url">eigenomic.com</span>
+  </div>
+</div>
+
+</body>
+</html>
